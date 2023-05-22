@@ -5,13 +5,13 @@
 package com.example.music_fly_project.entity;
 
 import java.io.Serializable;
-import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 /**
@@ -21,6 +21,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "albums")
 public class AlbumsEntity implements Serializable {
+
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "image_album")
+    private byte[] imageAlbum;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -92,16 +97,29 @@ public class AlbumsEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AlbumsEntity that = (AlbumsEntity) o;
-        return userId == that.userId && songId == that.songId && id.equals(that.id) && Objects.equals(nameAlbum, that.nameAlbum);
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof AlbumsEntity)) {
+            return false;
+        }
+        AlbumsEntity other = (AlbumsEntity) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
         return "com.mycompany.mavenproject1.Albums[ id=" + id + " ]";
+    }
+
+    public byte[] getImageAlbum() {
+        return imageAlbum;
+    }
+
+    public void setImageAlbum(byte[] imageAlbum) {
+        this.imageAlbum = imageAlbum;
     }
     
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Validated
 @RestController
-@RequestMapping("/password")
+@RequestMapping("/Password")
 public class PasswordController {
     @Autowired
     private PasswordServer passwordServer;

@@ -13,8 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,6 +24,14 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "songs")
 public class SongsEntity implements Serializable {
+
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "the_song")
+    private byte[] theSong;
+    @Basic(optional = false)
+    @Column(name = "album_id")
+    private long albumId;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,10 +45,6 @@ public class SongsEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "user_id")
     private long userId;
-    @Basic(optional = false)
-    @Lob
-    @Column(name = "the_song")
-    private byte[] theSong;
     @Basic(optional = false)
     @Column(name = "zaner")
     private String zaner;
@@ -123,8 +125,29 @@ public class SongsEntity implements Serializable {
     }
 
     @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof SongsEntity)) {
+            return false;
+        }
+        SongsEntity other = (SongsEntity) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "com.mycompany.mavenproject1.Songs[ id=" + id + " ]";
+    }
+
+    public long getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(long albumId) {
+        this.albumId = albumId;
     }
     
 }
