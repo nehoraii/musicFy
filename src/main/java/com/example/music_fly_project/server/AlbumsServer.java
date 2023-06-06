@@ -1,41 +1,55 @@
 package com.example.music_fly_project.server;
 
 import com.example.music_fly_project.entity.AlbumsEntity;
+import com.example.music_fly_project.enums.ErrorsEnumForAlbums;
 import com.example.music_fly_project.repository.AlbumsRepository;
 import com.example.music_fly_project.vo.AlbumsVO;
+import org.hibernate.annotations.NotFound;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
+import java.util.Optional;
+
 @Service
 public class AlbumsServer {
     @Autowired
     private AlbumsRepository albumsRepository;
-    public long save(AlbumsVO albumsVO){
+    public ErrorsEnumForAlbums save(AlbumsVO albumsVO){
         AlbumsEntity bean =new AlbumsEntity();
         BeanUtils.copyProperties(albumsVO,bean);
-        bean=albumsRepository.save(bean);
-        return bean.getId();
-    }
-    public long delete(long id){
-        albumsRepository.deleteById(id);
-        return id;
-    }
-    public long update(AlbumsVO albumsVO){
-        AlbumsEntity bean;
-        try{
-            bean=getById(albumsVO.getId());
+        try {
+            albumsRepository.save(bean);
         }catch (Exception e){
-            e.getMessage();
-            return -1;
+            System.out.println(e);
+            return ErrorsEnumForAlbums.NotSavedSuccessfully;
         }
-        BeanUtils.copyProperties(albumsVO,bean);
-        return albumsRepository.save(bean).getId();
-
+        return ErrorsEnumForAlbums.GOOD;
     }
-    private AlbumsEntity getById(long id){
-        return albumsRepository.findById(id)
-                .orElseThrow(()->new NoSuchElementException(id + " Not Found !!!"));
+    public ErrorsEnumForAlbums delete(long id){
+        Optional<AlbumsEntity> albums;
+        albums=getById(id);
+        if(!albums.isPresent()){
+            return ErrorsEnumForAlbums.AlbumsNotFound;
+        }
+        albumsRepository.deleteById(id);
+        return ErrorsEnumForAlbums.GOOD;
+    }
+    public ErrorsEnumForAlbums update(AlbumsVO albumsVO){
+        Optional<AlbumsEntity> albums;
+        albums=getById(albumsVO.getId());
+        if(!albums.isPresent()){
+            return ErrorsEnumForAlbums.AlbumsNotFound;
+        }
+        if(albumsVO.equals(albums.get())){
+            return ErrorsEnumForAlbums.TheSameAlbum;
+        }
+        AlbumsEntity bean=new AlbumsEntity();
+        BeanUtils.copyProperties(albumsVO,bean);
+        albumsRepository.save(bean).getId();
+        return ErrorsEnumForAlbums.GOOD;
+    }
+    private Optional<AlbumsEntity> getById(long id){
+        return albumsRepository.findById(id);
     }
 }

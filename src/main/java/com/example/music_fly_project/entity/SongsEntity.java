@@ -6,16 +6,18 @@ package com.example.music_fly_project.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 /**
  *
@@ -23,15 +25,20 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "songs")
+@NamedQueries({
+    @NamedQuery(name = "SongsEntity.findAll", query = "SELECT s FROM SongsEntity s"),
+    @NamedQuery(name = "SongsEntity.findById", query = "SELECT s FROM SongsEntity s WHERE s.id = :id"),
+    @NamedQuery(name = "SongsEntity.findByNameSong", query = "SELECT s FROM SongsEntity s WHERE s.nameSong = :nameSong"),
+    @NamedQuery(name = "SongsEntity.findByUserId", query = "SELECT s FROM SongsEntity s WHERE s.userId = :userId"),
+    @NamedQuery(name = "SongsEntity.findByZaner", query = "SELECT s FROM SongsEntity s WHERE s.zaner = :zaner"),
+    @NamedQuery(name = "SongsEntity.findByDate", query = "SELECT s FROM SongsEntity s WHERE s.date = :date"),
+    @NamedQuery(name = "SongsEntity.findByAlbumId", query = "SELECT s FROM SongsEntity s WHERE s.albumId = :albumId")})
 public class SongsEntity implements Serializable {
 
     @Basic(optional = false)
     @Lob
     @Column(name = "the_song")
     private byte[] theSong;
-    @Basic(optional = false)
-    @Column(name = "album_id")
-    private long albumId;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -52,6 +59,9 @@ public class SongsEntity implements Serializable {
     @Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+    @Basic(optional = false)
+    @Column(name = "album_id")
+    private long albumId;
 
     public SongsEntity() {
     }
@@ -60,13 +70,14 @@ public class SongsEntity implements Serializable {
         this.id = id;
     }
 
-    public SongsEntity(Long id, String nameSong, long userId, byte[] theSong, String zaner, Date date) {
+    public SongsEntity(Long id, String nameSong, long userId, byte[] theSong, String zaner, Date date, long albumId) {
         this.id = id;
         this.nameSong = nameSong;
         this.userId = userId;
         this.theSong = theSong;
         this.zaner = zaner;
         this.date = date;
+        this.albumId = albumId;
     }
 
     public Long getId() {
@@ -93,14 +104,6 @@ public class SongsEntity implements Serializable {
         this.userId = userId;
     }
 
-    public byte[] getTheSong() {
-        return theSong;
-    }
-
-    public void setTheSong(byte[] theSong) {
-        this.theSong = theSong;
-    }
-
     public String getZaner() {
         return zaner;
     }
@@ -115,6 +118,14 @@ public class SongsEntity implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public long getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(long albumId) {
+        this.albumId = albumId;
     }
 
     @Override
@@ -139,15 +150,15 @@ public class SongsEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mycompany.mavenproject1.Songs[ id=" + id + " ]";
+        return "com.mycompany.practidb.SongsEntity[ id=" + id + " ]";
     }
 
-    public long getAlbumId() {
-        return albumId;
+    public byte[] getTheSong() {
+        return theSong;
     }
 
-    public void setAlbumId(long albumId) {
-        this.albumId = albumId;
+    public void setTheSong(byte[] theSong) {
+        this.theSong = theSong;
     }
     
 }

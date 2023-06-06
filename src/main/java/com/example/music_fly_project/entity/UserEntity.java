@@ -24,6 +24,16 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "user")
+@NamedQueries({
+    @NamedQuery(name = "UserEntity.findAll", query = "SELECT u FROM UserEntity u"),
+    @NamedQuery(name = "UserEntity.findById", query = "SELECT u FROM UserEntity u WHERE u.id = :id"),
+    @NamedQuery(name = "UserEntity.findByName", query = "SELECT u FROM UserEntity u WHERE u.name = :name"),
+    @NamedQuery(name = "UserEntity.findBySecName", query = "SELECT u FROM UserEntity u WHERE u.secName = :secName"),
+    @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT u FROM UserEntity u WHERE u.email = :email"),
+    @NamedQuery(name = "UserEntity.findByPhone", query = "SELECT u FROM UserEntity u WHERE u.phone = :phone"),
+    @NamedQuery(name = "UserEntity.findByUserName", query = "SELECT u FROM UserEntity u WHERE u.userName = :userName"),
+    @NamedQuery(name = "UserEntity.findByBirthDay", query = "SELECT u FROM UserEntity u WHERE u.birthDay = :birthDay"),
+    @NamedQuery(name = "UserEntity.findBySecretKey", query = "SELECT u FROM UserEntity u WHERE u.secretKey = :secretKey")})
 public class UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -143,9 +153,23 @@ public class UserEntity implements Serializable {
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof UserEntity)) {
+            return false;
+        }
+        UserEntity other = (UserEntity) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
-        return "com.mycompany.mavenproject1.User[ id=" + id + " ]";
+        return "com.mycompany.practidb.UserEntity[ id=" + id + " ]";
     }
     
 }

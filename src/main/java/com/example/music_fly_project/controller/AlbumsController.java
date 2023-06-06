@@ -1,5 +1,6 @@
 package com.example.music_fly_project.controller;
 
+import com.example.music_fly_project.enums.ErrorsEnumForAlbums;
 import com.example.music_fly_project.repository.AlbumsRepository;
 import com.example.music_fly_project.server.AlbumsServer;
 import com.example.music_fly_project.vo.AlbumsVO;
@@ -14,16 +15,15 @@ public class AlbumsController {
     @Autowired
     private  AlbumsServer albumsServer;
     @PostMapping("/save")
-    public long save(@RequestBody AlbumsVO albumsVO){
+    public ErrorsEnumForAlbums save(@RequestBody AlbumsVO albumsVO){
         return albumsServer.save(albumsVO);
     }
     @DeleteMapping("/delete")
-    public long delete(@RequestBody AlbumsVO albumsVO){
+    public ErrorsEnumForAlbums delete(@RequestBody AlbumsVO albumsVO){
         return albumsServer.delete(albumsVO.getId());
     }
     @PutMapping("/update")
-    public long update(@RequestBody AlbumsVO albumsVO){
-        long userId=albumsServer.update(albumsVO);
-        return userId;
+    public ErrorsEnumForAlbums update(@RequestBody AlbumsVO albumsVO){
+        return albumsServer.update(albumsVO);
     }
 }

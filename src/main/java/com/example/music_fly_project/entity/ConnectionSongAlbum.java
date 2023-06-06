@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
@@ -21,18 +20,13 @@ import jakarta.persistence.Table;
  * @author user
  */
 @Entity
-@Table(name = "albums")
+@Table(name = "connection_song_album")
 @NamedQueries({
-    @NamedQuery(name = "AlbumsEntity.findAll", query = "SELECT a FROM AlbumsEntity a"),
-    @NamedQuery(name = "AlbumsEntity.findById", query = "SELECT a FROM AlbumsEntity a WHERE a.id = :id"),
-    @NamedQuery(name = "AlbumsEntity.findByUserId", query = "SELECT a FROM AlbumsEntity a WHERE a.userId = :userId"),
-    @NamedQuery(name = "AlbumsEntity.findByNameAlbum", query = "SELECT a FROM AlbumsEntity a WHERE a.nameAlbum = :nameAlbum")})
-public class AlbumsEntity implements Serializable {
-
-    @Basic(optional = false)
-    @Lob
-    @Column(name = "image_album")
-    private byte[] imageAlbum;
+    @NamedQuery(name = "ConnectionSongAlbum.findAll", query = "SELECT c FROM ConnectionSongAlbum c"),
+    @NamedQuery(name = "ConnectionSongAlbum.findById", query = "SELECT c FROM ConnectionSongAlbum c WHERE c.id = :id"),
+    @NamedQuery(name = "ConnectionSongAlbum.findByAlbumId", query = "SELECT c FROM ConnectionSongAlbum c WHERE c.albumId = :albumId"),
+    @NamedQuery(name = "ConnectionSongAlbum.findBySongId", query = "SELECT c FROM ConnectionSongAlbum c WHERE c.songId = :songId")})
+public class ConnectionSongAlbum implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,24 +35,23 @@ public class AlbumsEntity implements Serializable {
     @Column(name = "id")
     private Long id;
     @Basic(optional = false)
-    @Column(name = "user_id")
-    private long userId;
+    @Column(name = "album_id")
+    private long albumId;
     @Basic(optional = false)
-    @Column(name = "name_album")
-    private String nameAlbum;
+    @Column(name = "song_id")
+    private long songId;
 
-    public AlbumsEntity() {
+    public ConnectionSongAlbum() {
     }
 
-    public AlbumsEntity(Long id) {
+    public ConnectionSongAlbum(Long id) {
         this.id = id;
     }
 
-    public AlbumsEntity(Long id, long userId, String nameAlbum, byte[] imageAlbum) {
+    public ConnectionSongAlbum(Long id, long albumId, long songId) {
         this.id = id;
-        this.userId = userId;
-        this.nameAlbum = nameAlbum;
-        this.imageAlbum = imageAlbum;
+        this.albumId = albumId;
+        this.songId = songId;
     }
 
     public Long getId() {
@@ -69,28 +62,20 @@ public class AlbumsEntity implements Serializable {
         this.id = id;
     }
 
-    public long getUserId() {
-        return userId;
+    public long getAlbumId() {
+        return albumId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setAlbumId(long albumId) {
+        this.albumId = albumId;
     }
 
-    public String getNameAlbum() {
-        return nameAlbum;
+    public long getSongId() {
+        return songId;
     }
 
-    public void setNameAlbum(String nameAlbum) {
-        this.nameAlbum = nameAlbum;
-    }
-
-    public byte[] getImageAlbum() {
-        return imageAlbum;
-    }
-
-    public void setImageAlbum(byte[] imageAlbum) {
-        this.imageAlbum = imageAlbum;
+    public void setSongId(long songId) {
+        this.songId = songId;
     }
 
     @Override
@@ -103,10 +88,10 @@ public class AlbumsEntity implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof AlbumsEntity)) {
+        if (!(object instanceof ConnectionSongAlbum)) {
             return false;
         }
-        AlbumsEntity other = (AlbumsEntity) object;
+        ConnectionSongAlbum other = (ConnectionSongAlbum) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -115,8 +100,7 @@ public class AlbumsEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mycompany.practidb.AlbumsEntity[ id=" + id + " ]";
+        return "com.mycompany.practidb.ConnectionSongAlbum[ id=" + id + " ]";
     }
-
     
 }

@@ -6,13 +6,14 @@ package com.example.music_fly_project.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,6 +24,12 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "password")
+@NamedQueries({
+    @NamedQuery(name = "PasswordEntity.findAll", query = "SELECT p FROM PasswordEntity p"),
+    @NamedQuery(name = "PasswordEntity.findById", query = "SELECT p FROM PasswordEntity p WHERE p.id = :id"),
+    @NamedQuery(name = "PasswordEntity.findByUserId", query = "SELECT p FROM PasswordEntity p WHERE p.userId = :userId"),
+    @NamedQuery(name = "PasswordEntity.findByPass", query = "SELECT p FROM PasswordEntity p WHERE p.pass = :pass"),
+    @NamedQuery(name = "PasswordEntity.findByDate", query = "SELECT p FROM PasswordEntity p WHERE p.date = :date")})
 public class PasswordEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -96,16 +103,21 @@ public class PasswordEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PasswordEntity that = (PasswordEntity) o;
-        return getUserId() == that.getUserId() && getId().equals(that.getId()) && Objects.equals(getPass(), that.getPass()) && Objects.equals(getDate(), that.getDate());
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof PasswordEntity)) {
+            return false;
+        }
+        PasswordEntity other = (PasswordEntity) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return "com.mycompany.mavenproject1.Password[ id=" + id + " ]";
+        return "com.mycompany.practidb.PasswordEntity[ id=" + id + " ]";
     }
     
 }
