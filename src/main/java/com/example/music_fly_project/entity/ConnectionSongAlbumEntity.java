@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -21,8 +20,8 @@ import lombok.Data;
  */
 @Entity
 @Data
-@Table(name = "albums")
-public class AlbumsEntity implements Serializable {
+@Table(name = "connection_song_album")
+public class ConnectionSongAlbumEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -31,15 +30,10 @@ public class AlbumsEntity implements Serializable {
     @Column(name = "id")
     private Long id;
     @Basic(optional = false)
-    @Column(name = "user_id")
-    private long userId;
+    @Column(name = "album_id")
+    private long albumId;
     @Basic(optional = false)
-    @Column(name = "name_album")
-    private String nameAlbum;
-    @Basic(optional = false)
-    @Lob
-    @Column(name = "image_album")
-    private byte[] imageAlbum;
-    @Column(name = "length_album")
-    private long lengthAlbum;
+    @Column(name = "song_id")
+    private long songId;
+
 }

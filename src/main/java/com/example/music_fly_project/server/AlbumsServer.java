@@ -41,12 +41,12 @@ public class AlbumsServer {
         if(!albums.isPresent()){
             return ErrorsEnumForAlbums.AlbumsNotFound;
         }
-        if(albumsVO.equals(albums.get())){
-            return ErrorsEnumForAlbums.TheSameAlbum;
-        }
+//        if(albumsVO.equals(albums.get())){
+//            return ErrorsEnumForAlbums.TheSameAlbum;
+//        }
         AlbumsEntity bean=new AlbumsEntity();
         BeanUtils.copyProperties(albumsVO,bean);
-        albumsRepository.save(bean).getId();
+        albumsRepository.save(bean);
         return ErrorsEnumForAlbums.GOOD;
     }
     private Optional<AlbumsEntity> getById(long id){

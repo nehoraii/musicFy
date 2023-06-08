@@ -23,7 +23,7 @@ import jakarta.persistence.TemporalType;
  * @author user
  */
 @Entity
-@Table(name = "user")
+@Table(name = "user",schema = "public")
 @NamedQueries({
     @NamedQuery(name = "UserEntity.findAll", query = "SELECT u FROM UserEntity u"),
     @NamedQuery(name = "UserEntity.findById", query = "SELECT u FROM UserEntity u WHERE u.id = :id"),
