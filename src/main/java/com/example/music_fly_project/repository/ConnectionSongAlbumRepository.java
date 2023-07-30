@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface ConnectionSongAlbumRepository extends  JpaRepository<ConnectionSongAlbumEntity,Long> {
     @Query("SELECT e FROM ConnectionSongAlbumEntity e where e.albumId=:id")
     Optional<List<ConnectionSongAlbumEntity>> getSongForAlbum(@Param("id")long id);
+    @Query("SELECT e FROM ConnectionSongAlbumEntity  e WHERE e.songId=:songId")
+    Optional<List<ConnectionSongAlbumEntity>> getConnectionBySongId(@Param("songId") long songId);
 }

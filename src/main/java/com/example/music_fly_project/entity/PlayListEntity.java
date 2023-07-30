@@ -25,14 +25,13 @@ import lombok.Data;
  * @author user
  */
 @Entity
-@Table(name = "play_list")
+@Table(name = "play_list",schema = "public")
 @Data
 public class PlayListEntity implements Serializable {
 
-    @Lob
-    @Column(name = "image")
+    @Column(name = "image",columnDefinition="bytea")
     private byte[] image;
-    @Column(name = "length_play_list")
+    @Column(name = "length_play_list",columnDefinition = "bigint")
     private long lengthPlayList;
 
     private static final long serialVersionUID = 1L;

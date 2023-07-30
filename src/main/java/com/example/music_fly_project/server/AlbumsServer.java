@@ -2,6 +2,7 @@ package com.example.music_fly_project.server;
 
 import com.example.music_fly_project.entity.AlbumsEntity;
 import com.example.music_fly_project.enums.ErrorsEnumForAlbums;
+import com.example.music_fly_project.logic.AlbumsLogic;
 import com.example.music_fly_project.repository.AlbumsRepository;
 import com.example.music_fly_project.vo.AlbumsVO;
 import org.hibernate.annotations.NotFound;
@@ -15,16 +16,18 @@ import java.util.Optional;
 public class AlbumsServer {
     @Autowired
     private AlbumsRepository albumsRepository;
-    public ErrorsEnumForAlbums save(AlbumsVO albumsVO){
+    public AlbumsVO save(AlbumsVO albumsVO){
         AlbumsEntity bean =new AlbumsEntity();
-        BeanUtils.copyProperties(albumsVO,bean);
+        AlbumsLogic.copyProperty(albumsVO,bean);
         try {
-            albumsRepository.save(bean);
+            bean=albumsRepository.save(bean);
         }catch (Exception e){
             System.out.println(e);
-            return ErrorsEnumForAlbums.NotSavedSuccessfully;
+            albumsVO.setE(ErrorsEnumForAlbums.NotSavedSuccessfully);
+            return albumsVO;
         }
-        return ErrorsEnumForAlbums.GOOD;
+        albumsVO.setE(ErrorsEnumForAlbums.GOOD);
+        return albumsVO;
     }
     public ErrorsEnumForAlbums delete(long id){
         Optional<AlbumsEntity> albums;

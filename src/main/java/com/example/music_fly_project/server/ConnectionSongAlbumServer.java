@@ -4,15 +4,17 @@ import com.example.music_fly_project.enums.ErrosEnumForConnectionSongAlbum;
 import com.example.music_fly_project.logic.ConnectionSongForAlbumLogic;
 import com.example.music_fly_project.repository.ConnectionSongAlbumRepository;
 import com.example.music_fly_project.vo.ConnectionSongAlbumsVO;
+import com.example.music_fly_project.vo.SongsVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Service
 public class ConnectionSongAlbumServer {
-    private List<ConnectionSongAlbumsVO>listAlbum;
+
     @Autowired
     private ConnectionSongAlbumRepository connectionSongAlbumRepository;
     public ErrosEnumForConnectionSongAlbum save(ConnectionSongAlbumsVO conVO){
@@ -52,20 +54,25 @@ public class ConnectionSongAlbumServer {
     private Optional<ConnectionSongAlbumEntity> getById(long id){
         return connectionSongAlbumRepository.findById(id);
     }
-    public ErrosEnumForConnectionSongAlbum FileTheList(long id){
+    public List<ConnectionSongAlbumsVO> getConnectionByAlbum(long id){
         Optional<List<ConnectionSongAlbumEntity>>list;
         list=connectionSongAlbumRepository.getSongForAlbum(id);
         if(!list.isPresent()){
-            return ErrosEnumForConnectionSongAlbum.ALBUM_NOT_FOUND;
+            return null;
         }
-        boolean answer=ConnectionSongForAlbumLogic.copyProperty(list.get(),listAlbum);
-        if(!answer){
-            return ErrosEnumForConnectionSongAlbum.ERROR_COPY_PROPERTY;
-        }
-        return ErrosEnumForConnectionSongAlbum.GOOD;
-    }
-    public List<ConnectionSongAlbumsVO> getListAlbum(){
+        List<ConnectionSongAlbumsVO>listAlbum=new ArrayList<>();
+        ConnectionSongForAlbumLogic.copyProperty(list.get(),listAlbum);
         return listAlbum;
+    }
+    public List<ConnectionSongAlbumsVO> getConnectionBySongId(long id){
+        Optional<List<ConnectionSongAlbumEntity>> list;
+        List<ConnectionSongAlbumsVO> listVo=new ArrayList<>();
+        list=connectionSongAlbumRepository.getConnectionBySongId(id);
+        if(list.isPresent()){
+            return null;
+        }
+        ConnectionSongForAlbumLogic.copyProperty(list.get(),listVo);
+        return listVo;
     }
 
 }

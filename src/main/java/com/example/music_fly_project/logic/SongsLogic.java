@@ -1,5 +1,6 @@
 package com.example.music_fly_project.logic;
 
+import com.example.music_fly_project.entity.SongsEntity;
 import com.example.music_fly_project.enums.ErrorsEnumForSongs;
 import com.example.music_fly_project.vo.SongsVO;
 
@@ -7,6 +8,8 @@ import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SongsLogic {
     public static int sizeCheckCopyright=5;
@@ -45,5 +48,36 @@ public class SongsLogic {
             System.out.println(e);
         }
         return -1;
+    }
+    public static List<SongsVO> copyListEntityToVO(List<SongsEntity> listEntity){
+        List<SongsVO> list=new ArrayList<>();
+        SongsVO songsVO;
+        for (int i = 0; i < listEntity.size(); i++) {
+            songsVO=new SongsVO();
+            songsVO.setNameSong(listEntity.get(i).getNameSong());
+            songsVO.setZaner(listEntity.get(i).getZaner());
+            songsVO.setId(listEntity.get(i).getId());
+            songsVO.setTheSong(null);
+            songsVO.setDate(listEntity.get(i).getDate());
+            songsVO.setUserId(listEntity.get(i).getUserId());
+            list.add(songsVO);
+        }
+        return list;
+    }
+    public static void copyProperty(SongsVO from, SongsEntity to){
+        to.setTheSong(from.getTheSong());
+        to.setId(from.getId());
+        to.setDate(from.getDate());
+        to.setZaner(from.getZaner());
+        to.setUserId(from.getUserId());
+        to.setNameSong(from.getNameSong());
+    }
+    public static void copyProperty(SongsEntity from, SongsVO to){
+        to.setTheSong(from.getTheSong());
+        to.setDate(from.getDate());
+        to.setZaner(from.getZaner());
+        to.setUserId(from.getUserId());
+        to.setNameSong(from.getNameSong());
+        to.setId(from.getId());
     }
 }
