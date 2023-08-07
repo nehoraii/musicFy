@@ -1,4 +1,5 @@
 package com.example.music_fly_project.repository;
+import com.example.music_fly_project.entity.AlbumsEntity;
 import com.example.music_fly_project.entity.SongsEntity;
 import com.example.music_fly_project.vo.SongsVO;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +20,6 @@ public interface SongsRepository extends JpaRepository<SongsEntity,Long> {
     Optional<List<SongsEntity>> getSongByListId(@Param("ListSongId")List<Long> listId);
     @Query("SELECT e FROM SongsEntity e WHERE e.userId=:userId")
     Optional<List<SongsEntity>> getSongsByUserId(@Param("userId") Long userId);
+    @Query("SELECT e from AlbumsEntity e JOIN ConnectionSongAlbumEntity c ON c.albumId=e.id WHERE c.songId=:songId")
+    Optional<AlbumsEntity> getAlbumBySongId(@Param("songId") Long songId);
 }

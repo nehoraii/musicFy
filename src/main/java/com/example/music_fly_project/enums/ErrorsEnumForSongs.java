@@ -7,6 +7,7 @@ public enum ErrorsEnumForSongs {
     NOT_SAVED_SUCCESSFULLY,
     SAVED_SUCCESSFULLY,
     YOURS_SONGS,
-    LAYER
+    LAYER,
+    THE_SAME_SONG
 
 }

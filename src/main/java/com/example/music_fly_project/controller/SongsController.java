@@ -64,4 +64,17 @@ public class SongsController {
         e=songsServer.getCopyright(twoIdSongs);
         return e;
     }
+    @PostMapping("/getImageSong")
+    public byte[] getImageSong(@RequestBody SongsVO songsVO){
+        byte[] image;
+        image=songsServer.getImageSong(songsVO.getId());
+        return image;
+    }
+    @GetMapping("/try")
+    public String check(){
+        TwoIdSongs twoIdSongs=new TwoIdSongs();
+        twoIdSongs.setSourceId(86L);
+        twoIdSongs.setImitationId(85L);
+        return songsServer.getCopyright(twoIdSongs).name();
+    }
 }

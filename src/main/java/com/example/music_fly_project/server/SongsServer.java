@@ -1,5 +1,6 @@
 package com.example.music_fly_project.server;
 
+import com.example.music_fly_project.entity.AlbumsEntity;
 import com.example.music_fly_project.entity.SongsEntity;
 import com.example.music_fly_project.enums.ErrorsEnumForSongs;
 import com.example.music_fly_project.logic.Copyright;
@@ -105,7 +106,10 @@ public class SongsServer {
         SongsEntity firstSong,secSong;
         firstSong=getSongById(twoIdSongs.getSourceId());
         secSong=getSongById(twoIdSongs.getImitationId());
-        if(firstSong.getUserId()== secSong.getUserId()){
+        if(firstSong.getId()==secSong.getId()){
+            return ErrorsEnumForSongs.THE_SAME_SONG;
+        }
+            if(firstSong.getUserId()== secSong.getUserId()){
             return ErrorsEnumForSongs.YOURS_SONGS;
         }
         boolean answer=Copyright.compareFirst5Seconds(firstSong.getTheSong(),secSong.getTheSong());
@@ -113,5 +117,14 @@ public class SongsServer {
             return ErrorsEnumForSongs.COPYRIGHT;
         }
         return ErrorsEnumForSongs.LAYER;
+    }
+    public byte[] getImageSong(Long songId){
+        Optional<AlbumsEntity> albums;
+        albums=songsRepository.getAlbumBySongId(songId);
+        if(!albums.isPresent()){
+            return null;
+        }
+        byte[] image=albums.get().getImageAlbum();
+        return image;
     }
 }

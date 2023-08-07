@@ -21,6 +21,7 @@ public class AlbumsServer {
         AlbumsLogic.copyProperty(albumsVO,bean);
         try {
             bean=albumsRepository.save(bean);
+            AlbumsLogic.copyProperty(bean,albumsVO);
         }catch (Exception e){
             System.out.println(e);
             albumsVO.setE(ErrorsEnumForAlbums.NotSavedSuccessfully);
