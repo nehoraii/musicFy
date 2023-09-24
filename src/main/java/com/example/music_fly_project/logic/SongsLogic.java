@@ -2,7 +2,9 @@ package com.example.music_fly_project.logic;
 
 import com.example.music_fly_project.entity.SongsEntity;
 import com.example.music_fly_project.enums.ErrorsEnumForSongs;
+import com.example.music_fly_project.vo.SongVoClient;
 import com.example.music_fly_project.vo.SongsVO;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -79,5 +81,14 @@ public class SongsLogic {
         to.setUserId(from.getUserId());
         to.setNameSong(from.getNameSong());
         to.setId(from.getId());
+    }
+    public static void copyProperty(SongVoClient from,SongsVO to){
+        to.setE(from.getE());
+        to.setDate(from.getDate());
+        to.setNameSong(from.getNameSong());
+        to.setZaner(from.getZaner());
+        to.setTheSong(Base64.decodeBase64(from.getTheSong()));
+        to.setId(from.getId());
+        to.setUserId(from.getUserId());
     }
 }

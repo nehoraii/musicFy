@@ -1,14 +1,12 @@
 package com.example.music_fly_project.controller;
 import com.example.music_fly_project.enums.ErrorsEnumForSongs;
 import com.example.music_fly_project.server.SongsServer;
-import com.example.music_fly_project.vo.SongsVO;
-import com.example.music_fly_project.vo.TwoIdSongs;
-import com.example.music_fly_project.vo.UserVO;
+import com.example.music_fly_project.vo.*;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Validated
@@ -18,7 +16,7 @@ import java.util.List;
 public class SongsController {
     @Autowired
     private SongsServer songsServer;
-    @PostMapping("/save")
+    @PostMapping(value = "/save")
     public SongsVO save(@RequestBody SongsVO songsVO){
         SongsVO e;
         e= songsServer.save(songsVO);
@@ -54,15 +52,9 @@ public class SongsController {
         return list;
     }
     @PostMapping("/getSongsByUserId")
-    public List<SongsVO> getSongsByUserId(@RequestBody UserVO userVO){
-        List<SongsVO> list=songsServer.getSongsByUserId(userVO);
+    public List<SongsVO> getSongsByUserId(@RequestBody UserVO userVO) {
+        List<SongsVO> list = songsServer.getSongsByUserId(userVO);
         return list;
-    }
-    @PostMapping("/getCopyright")
-    public ErrorsEnumForSongs getCopyright (@RequestBody TwoIdSongs twoIdSongs){
-        ErrorsEnumForSongs e;
-        e=songsServer.getCopyright(twoIdSongs);
-        return e;
     }
     @PostMapping("/getImageSong")
     public byte[] getImageSong(@RequestBody SongsVO songsVO){
@@ -72,9 +64,10 @@ public class SongsController {
     }
     @GetMapping("/try")
     public String check(){
-        TwoIdSongs twoIdSongs=new TwoIdSongs();
-        twoIdSongs.setSourceId(86L);
-        twoIdSongs.setImitationId(85L);
-        return songsServer.getCopyright(twoIdSongs).name();
+        String a="גנצנצ";
+        System.out.println((int)a.charAt(0));
+        return null;
+        //return songsServer.getCopyright(twoIdSongs).name();
     }
+
 }
