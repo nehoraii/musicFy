@@ -106,8 +106,14 @@ public class SongsServer {
         if(!listEntity.isPresent()){
             return null;
         }
+        for (int i = 0; i < listEntity.get().size(); i++) {
+            Security.decipherFromDB(listEntity.get().get(i));
+        }
         List<SongsVO> listVo;
         listVo=SongsLogic.copyListEntityToVO(listEntity.get());
+        for (int i = 0; i <listVo.size(); i++) {
+            Security.encodeToClient(listVo.get(i));
+        }
         return listVo;
     }
     public byte[] getImageSong(Long songId){
