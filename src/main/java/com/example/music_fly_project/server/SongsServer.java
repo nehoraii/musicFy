@@ -17,6 +17,7 @@ import java.util.Optional;
 public class SongsServer {
     @Autowired
     private SongsRepository songsRepository;
+    private int limitToSearch=5;
     public SongsVO save(SongsVO songsVO) {
         Security.decipherFromClient(songsVO);
         SongsEntity bean = new SongsEntity();
@@ -35,7 +36,6 @@ public class SongsServer {
         Security.encodeToClient(songsVO);
         return songsVO;
     }
-
     public ErrorsEnumForSongs delete(long id){
         Optional<SongsEntity> songE=geyById(id);
         if(!songE.isPresent()){
@@ -58,11 +58,6 @@ public class SongsServer {
         Optional<SongsEntity> user=songsRepository.findById(id);
         return user;
     }
-    public ErrorsEnumForSongs checkCopyright(SongsVO song1 , SongsVO song2){
-        ErrorsEnumForSongs e;
-        e=SongsLogic.checkSong(song1.getTheSong(),song2.getTheSong());
-        return e;
-    }
     private SongsEntity getSongById(long songId){
         SongsEntity song;
         song =songsRepository.getReferenceById(songId);
@@ -82,8 +77,9 @@ public class SongsServer {
             SongsEntity songsEntity1=new SongsEntity();
             SongsLogic.copyProperty(songsVO,songsEntity1);
             Security.encodeToDB(songsEntity1);
+            System.out.println(songsEntity1.getNameSong());
             String name=songsEntity1.getNameSong();
-            songsEntity=songsRepository.getSongByName(name);
+            songsEntity=songsRepository.getSongByName(name, songsVO.getId(),limitToSearch);
         }catch (Exception e){
             System.out.println(e);
             return null;

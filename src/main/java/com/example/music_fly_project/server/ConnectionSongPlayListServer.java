@@ -32,7 +32,7 @@ public class ConnectionSongPlayListServer {
         if(!con.isPresent()){
             return ErrorEnumForConSongPlayList.CONNECTION_NOT_FOUND;
         }
-        conSongPlayListRepository.deleteById(conSongPlayList.getId());
+        conSongPlayListRepository.deleteById(con.get().getId());
         return ErrorEnumForConSongPlayList.GOOD;
     }
     /*public ErrorEnumForConSongPlayList update(twoConnectionSongPlayListVO connectionSongPlayListVO){

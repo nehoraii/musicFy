@@ -6,6 +6,9 @@ import com.example.music_fly_project.vo.SongsVO;
 public class Security {
     private static int numToClient=7;
     private static int numToDB=3;
+    private static int specialNumToSongName(){
+        return 31;
+    }
     public static void encodeToClient(SongsVO songsVO){
         if(songsVO.getTheSong()!=null){
             byte[] arr=songsVO.getTheSong();
@@ -47,8 +50,9 @@ public class Security {
             songsEntity.setTheSong(arr);
         }
         if(songsEntity.getNameSong()!=null){
+            //מיוחד כדי שנוכל לעשות LIKE
             String nameSong=songsEntity.getNameSong();
-            nameSong=FunName(nameSong,true,numToDB);
+            nameSong=addingToAllString(nameSong,specialNumToSongName());
             songsEntity.setNameSong(nameSong);
         }
         if(songsEntity.getZaner()!=null){
@@ -64,8 +68,9 @@ public class Security {
             songsEntity.setTheSong(arr);
         }
         if(songsEntity.getNameSong()!=null){
+            //מיוחד כדי שנוכל לעשות LIKE
             String nameSong=songsEntity.getNameSong();
-            nameSong=FunName(nameSong,false,numToDB);
+            nameSong=removingToAllString(nameSong,specialNumToSongName());
             songsEntity.setNameSong(nameSong);
         }
         if(songsEntity.getZaner()!=null){
@@ -167,6 +172,20 @@ public class Security {
         for (int i = 1; i < charArray.length-1;i++) {
                 charArray[i]+=key;
             }
+        return new String(charArray);
+    }
+    private static String addingToAllString(String str,int key){
+        char[] charArray = str.toCharArray();
+        for (int i = 0; i < charArray.length;i++) {
+            charArray[i]+=key;
+        }
+        return new String(charArray);
+    }
+    private static String removingToAllString(String str,int key){
+        char[] charArray = str.toCharArray();
+        for (int i = 0; i < charArray.length;i++) {
+            charArray[i]-=key;
+        }
         return new String(charArray);
     }
     private static String removeAdding(String str,int key){

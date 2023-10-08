@@ -14,8 +14,8 @@ import java.util.Optional;
 public interface SongsRepository extends JpaRepository<SongsEntity,Long> {
     @Query("SELECT e FROM SongsEntity e WHERE e.userId=?1")
     Optional<List<SongsEntity>> getByUserId(long id);
-    @Query(value = "SELECT * FROM songs WHERE name_song LIKE %:name%",nativeQuery = true)
-    Optional<List<SongsEntity>> getSongByName(@Param("name") String Name);
+    @Query(value = "SELECT * FROM songs WHERE name_song LIKE %:name% AND id > :lastIdSong LIMIT :lim",nativeQuery = true)
+    Optional<List<SongsEntity>> getSongByName(@Param("name") String Name,@Param("lastIdSong")Long songId,@Param("lim") int limit);
     @Query("SELECT e FROM SongsEntity e WHERE e.userId IN :ListSongId")
     Optional<List<SongsEntity>> getSongByListId(@Param("ListSongId")List<Long> listId);
     @Query("SELECT e FROM SongsEntity e WHERE e.userId=:userId")

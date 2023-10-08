@@ -41,10 +41,10 @@ public class SongsController {
         return e;
     }
      */
-    @PostMapping(value = "/getSongById",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public byte[] getTheSongById(@RequestBody SongsVO songsVO){
+    @PostMapping(value = "/getSongById")
+    public SongsVO getTheSongById(@RequestBody SongsVO songsVO){
         SongsVO song=songsServer.getSongById(songsVO);
-        return song.getTheSong();
+        return song;
     }
     @PostMapping("/getSongByName")
     public List<SongsVO> getSongByName(@RequestBody SongsVO songsVO){
@@ -61,13 +61,6 @@ public class SongsController {
         byte[] image;
         image=songsServer.getImageSong(songsVO.getId());
         return image;
-    }
-    @GetMapping("/try")
-    public String check(){
-        String a="גנצנצ";
-        System.out.println((int)a.charAt(0));
-        return null;
-        //return songsServer.getCopyright(twoIdSongs).name();
     }
 
 }
