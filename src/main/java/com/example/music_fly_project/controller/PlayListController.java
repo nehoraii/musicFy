@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Validated
@@ -21,7 +22,7 @@ public class PlayListController {
     @Autowired
     private PlayListServer playListServer;
     @PostMapping("/save")
-    public ErrorsEnumForPlayList save(@RequestBody PlayListVO playListVO){
+    public PlayListVO save(@RequestBody PlayListVO playListVO){
         return playListServer.save(playListVO);
     }
     @DeleteMapping("/delete")
@@ -48,10 +49,15 @@ public class PlayListController {
         list=playListServer.getPlayListByUserId(playListVO);
         return list;
     }
+    @PostMapping("/changeImage")
+    public void changeImage(@RequestBody PlayListVO playListVO){
+        playListServer.changeImagePlayList(playListVO.getId());
+    }
     @PostMapping("/getPlayListByPlayListId")
     public List<SongsVO> getPlayListByPlayListId(@RequestBody PlayListVO playListVO){
         List<SongsVO>list;
         list=playListServer.getPlayListById(playListVO);
         return list;
     }
+
 }

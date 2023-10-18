@@ -1,5 +1,6 @@
 package com.example.music_fly_project.vo;
 
+import com.example.music_fly_project.enums.ErrorsEnumForPlayList;
 import lombok.Data;
 
 import java.util.Date;
@@ -12,6 +13,7 @@ public class PlayListVO {
     private boolean public1;
     private Date date;
     private byte[] image;
+    private ErrorsEnumForPlayList e;
 
 
 }

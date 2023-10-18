@@ -2,6 +2,7 @@ package com.example.music_fly_project.controller;
 
 import com.example.music_fly_project.enums.ErrorEnumForConSongPlayList;
 import com.example.music_fly_project.server.ConnectionSongPlayListServer;
+import com.example.music_fly_project.server.PlayListServer;
 import com.example.music_fly_project.vo.ConnectionSongPlayListVO;
 import com.example.music_fly_project.vo.PlayListVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,13 @@ import java.util.List;
 public class ConnectionSongPlayListController {
     @Autowired
     private ConnectionSongPlayListServer server;
+    @Autowired
+    private PlayListServer playListServer;
     @PostMapping("/save")
     public ErrorEnumForConSongPlayList save(@RequestBody ConnectionSongPlayListVO connectionSongPlayListVO){
         ErrorEnumForConSongPlayList e;
         e=server.save(connectionSongPlayListVO);
+        playListServer.updateLengthPlayList(connectionSongPlayListVO.getPlayListId(), connectionSongPlayListVO.getSongId());
         return e;
     }
     @DeleteMapping("/delete")
@@ -37,10 +41,4 @@ public class ConnectionSongPlayListController {
         return e;
     }
     */
-    @PostMapping("/getConnectionByPlayListId")
-    public List<ConnectionSongPlayListVO> getConnectionByPlayListId(@RequestBody PlayListVO playListVO){
-        List<ConnectionSongPlayListVO>list;
-        list=server.getConnectionByPlayListId(playListVO);
-        return list;
-    }
 }

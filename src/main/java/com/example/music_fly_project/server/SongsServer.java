@@ -17,6 +17,8 @@ import java.util.Optional;
 public class SongsServer {
     @Autowired
     private SongsRepository songsRepository;
+    @Autowired
+    private ConnectionSongAlbumServer connectionSongAlbumServer;
     private int limitToSearch=5;
     public SongsVO save(SongsVO songsVO) {
         Security.decipherFromClient(songsVO);
@@ -41,6 +43,7 @@ public class SongsServer {
         if(!songE.isPresent()){
             return ErrorsEnumForSongs.SONG_NOT_FOUND;
         }
+        connectionSongAlbumServer.delConBySongId(id);
         songsRepository.deleteById(id);
         return ErrorsEnumForSongs.GOOD;
     }

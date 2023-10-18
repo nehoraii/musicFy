@@ -9,8 +9,8 @@ import java.util.List;
 public class PlayListLogic {
     public List<PlayListVO> copyList(List<PlayListEntity> list){
         List<PlayListVO> listVOS=new ArrayList<>();
-        PlayListVO playListVO=new PlayListVO();
         for (int i = 0; i < list.size() ; i++) {
+            PlayListVO playListVO=new PlayListVO();
             playListVO.setDate(list.get(i).getDate());
             playListVO.setPlayListName(list.get(i).getPlayListName());
             playListVO.setLengthPlayList(list.get(i).getLengthPlayList());

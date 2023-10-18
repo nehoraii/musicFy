@@ -74,5 +74,14 @@ public class ConnectionSongAlbumServer {
         ConnectionSongForAlbumLogic.copyProperty(list.get(),listVo);
         return listVo;
     }
+    public ErrosEnumForConnectionSongAlbum delConBySongId(Long songId){
+        try {
+            connectionSongAlbumRepository.DelConBySongId(songId);
+            return ErrosEnumForConnectionSongAlbum.GOOD;
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return ErrosEnumForConnectionSongAlbum.CAN_NOT_DELETE_CONNECTION;
+    }
 
 }

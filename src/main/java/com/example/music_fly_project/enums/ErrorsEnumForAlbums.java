@@ -4,6 +4,7 @@ public enum ErrorsEnumForAlbums {
     GOOD,
     NotSavedSuccessfully,
     AlbumsNotFound,
-    TheSameAlbum
+    TheSameAlbum,
+
 
 }

@@ -28,37 +28,21 @@ public class ConnectionSongPlayListServer {
     }
     public ErrorEnumForConSongPlayList delete(ConnectionSongPlayListVO conSongPlayList){
         Optional<ConnectionSongPlayListEntity> con;
-        con=conSongPlayListRepository.findById(conSongPlayList.getPlayListId());
+        con=conSongPlayListRepository.getConBySongIdAndPlayListId(conSongPlayList.getSongId(),conSongPlayList.getPlayListId());
         if(!con.isPresent()){
             return ErrorEnumForConSongPlayList.CONNECTION_NOT_FOUND;
         }
         conSongPlayListRepository.deleteById(con.get().getId());
         return ErrorEnumForConSongPlayList.GOOD;
     }
-    /*public ErrorEnumForConSongPlayList update(twoConnectionSongPlayListVO connectionSongPlayListVO){
-        Optional<ConnectionSongPlayListEntity> con;
-        con=conSongPlayListRepository.findById(connectionSongPlayListVO.getCon1().getPlayListId());
-        if(!con.isPresent()){
-            return ErrorEnumForConSongPlayList.CONNECTION_NOT_FOUND;
-        }
-        ConnectionSongPlayListEntity bean=new ConnectionSongPlayListEntity();
+    public ErrorEnumForConSongPlayList delAllConByPlayListId(Long playListId){
         try {
-            BeanUtils.copyProperties(connectionSongPlayListVO.getCon2(),bean);
-            conSongPlayListRepository.save(bean);
+            conSongPlayListRepository.DelAllConByPlayListId(playListId);
+            return ErrorEnumForConSongPlayList.GOOD;
         }catch (Exception e){
-            return ErrorEnumForConSongPlayList.NOT_SAVED_SUCCESSFULLY;
+            System.out.println(e);
+            return ErrorEnumForConSongPlayList.CAN_NOT_DELETE;
         }
-        return ErrorEnumForConSongPlayList.GOOD;
-    }
-
-     */
-    public List<ConnectionSongPlayListVO> getConnectionByPlayListId(PlayListVO playListVO){
-        Optional<List<ConnectionSongPlayListVO>> list;
-        list=conSongPlayListRepository.getConByPlayListId(playListVO.getId());
-        if(!list.isPresent()){
-            return null;
-        }
-        return list.get();
     }
 
 
