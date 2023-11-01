@@ -41,7 +41,7 @@ public class SongsController {
         return e;
     }
      */
-    @PostMapping(value = "/getSongById")
+    @PostMapping("/getSongById")
     public SongsVO getTheSongById(@RequestBody SongsVO songsVO){
         SongsVO song=songsServer.getSongById(songsVO);
         return song;

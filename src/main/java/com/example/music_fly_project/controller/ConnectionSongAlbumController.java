@@ -3,6 +3,7 @@ package com.example.music_fly_project.controller;
 import com.example.music_fly_project.enums.ErrorsEnumForAlbums;
 import com.example.music_fly_project.enums.ErrosEnumForConnectionSongAlbum;
 import com.example.music_fly_project.server.ConnectionSongAlbumServer;
+import com.example.music_fly_project.server.SongsServer;
 import com.example.music_fly_project.vo.AlbumsVO;
 import com.example.music_fly_project.vo.ConnectionSongAlbumsVO;
 import com.example.music_fly_project.vo.SongsVO;
@@ -20,6 +21,8 @@ import java.util.Objects;
 public class ConnectionSongAlbumController {
     @Autowired
     private ConnectionSongAlbumServer connectionSongAlbumServer;
+    @Autowired
+    private SongsServer songsServer;
     @PostMapping("/save")
     public ErrosEnumForConnectionSongAlbum save(@RequestBody ConnectionSongAlbumsVO conVO){
         ErrosEnumForConnectionSongAlbum e;
@@ -32,10 +35,11 @@ public class ConnectionSongAlbumController {
         e=connectionSongAlbumServer.update(conVO);
         return e;
     }
-    @DeleteMapping("/delte")
+    @DeleteMapping("/delete")
     public ErrosEnumForConnectionSongAlbum delete(@RequestBody ConnectionSongAlbumsVO conVO){
         ErrosEnumForConnectionSongAlbum e;
-        e=connectionSongAlbumServer.delete(conVO.getId());
+        e=connectionSongAlbumServer.delConBySongId(conVO.getSongId());
+        songsServer.delete(conVO.getSongId());
         return e;
     }
     @PostMapping("/getConnectionByAlbumId")

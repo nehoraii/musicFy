@@ -2,10 +2,12 @@ package com.example.music_fly_project.controller;
 
 import com.example.music_fly_project.enums.ErrorsEnumForPlayList;
 import com.example.music_fly_project.server.PlayListServer;
+import com.example.music_fly_project.vo.AlbumsVO;
 import com.example.music_fly_project.vo.ConnectionSongPlayListVO;
 import com.example.music_fly_project.vo.PlayListVO;
 import com.example.music_fly_project.vo.SongsVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,10 +56,17 @@ public class PlayListController {
         playListServer.changeImagePlayList(playListVO.getId());
     }
     @PostMapping("/getPlayListByPlayListId")
-    public List<SongsVO> getPlayListByPlayListId(@RequestBody PlayListVO playListVO){
-        List<SongsVO>list;
-        list=playListServer.getPlayListById(playListVO);
-        return list;
+    public List<Long> getPlayListByPlayListId(@RequestBody PlayListVO playListVO){
+        List<Long>listId;
+        listId=playListServer.getPlayListById(playListVO);
+        return listId;
     }
+    @PostMapping("/getInfoPlayList")
+    public List<SongsVO> getInfo(@RequestBody PlayListVO playListVO){
+        List<SongsVO> listVo;
+        listVo=playListServer.getPlayListInfoById(playListVO);
+        return listVo;
+    }
+
 
 }

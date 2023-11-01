@@ -22,6 +22,7 @@ public class ConnectionSongAlbumServer {
         BeanUtils.copyProperties(conVO,bean);
         try {
             connectionSongAlbumRepository.save(bean);
+
         }catch (Exception e){
             System.out.println(e);
             return ErrosEnumForConnectionSongAlbum.NOT_SAVED_SUCCESSFULLY;

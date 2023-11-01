@@ -111,14 +111,14 @@ public class Security {
     private static void removeAdding(byte[]bytesArray,int key){
         int j;
         for (int i = 1; i < bytesArray.length-1;) {
-            for (j = 0; j <key ; j++) {
+            for (j = 0; j <Math.abs(key) ; j++) {
                 if(i>= bytesArray.length-1){
                     break;
                 }
                 bytesArray[i]-=key;
                 i++;
             }
-            for (j = 0; j <key ; j++) {
+            for (j = 0; j <Math.abs(key) ; j++) {
                 if(i>= bytesArray.length-1){
                     break;
                 }
@@ -141,14 +141,14 @@ public class Security {
     private static void adding(byte[]bytesArray,int key){
         int j;
         for (int i = 1; i < bytesArray.length-1;) {
-            for (j = 0; j <key ; j++) {
+            for (j = 0; j <Math.abs(key) ; j++) {
                 if(i>= bytesArray.length-1){
                     break;
                 }
                 bytesArray[i]+=key;
                 i++;
             }
-            for (j = 0; j <key ; j++) {
+            for (j = 0; j <Math.abs(key) ; j++) {
                 if(i>= bytesArray.length-1){
                     break;
                 }

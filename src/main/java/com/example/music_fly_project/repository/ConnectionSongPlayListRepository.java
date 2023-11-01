@@ -16,10 +16,7 @@ import java.util.Optional;
 
 @Repository
 public interface ConnectionSongPlayListRepository extends JpaRepository<ConnectionSongPlayListEntity,Long> {
-    @Modifying
-    @Transactional
-    @Query(value = "DElETE FROM connection_song_play_list WHERE play_list_id=:playListId",nativeQuery = true)
-    void DelAllConByPlayListId(@Param("playListId")Long playListId);
-    @Query("SELECT E FROM ConnectionSongPlayListEntity  E WHERE E.songId=:id AND E.playListId=:playListId")
-    Optional<ConnectionSongPlayListEntity> getConBySongIdAndPlayListId(@Param("id")Long id,@Param("playListId")Long playListId);
+    @Query(value = "SELECT * FROM connection_song_play_list WHERE song_id=:songId AND play_list_id=:playListId LIMIT 1",nativeQuery = true)
+    Optional<ConnectionSongPlayListEntity> getConBySongIdAndPlayListId(@Param("songId")Long id,@Param("playListId")Long playListId);
+
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayListLogic {
-    public List<PlayListVO> copyList(List<PlayListEntity> list){
+    public static List<PlayListVO> copyList(List<PlayListEntity> list){
         List<PlayListVO> listVOS=new ArrayList<>();
         for (int i = 0; i < list.size() ; i++) {
             PlayListVO playListVO=new PlayListVO();

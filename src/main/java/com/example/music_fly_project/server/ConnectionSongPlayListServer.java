@@ -9,13 +9,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ConnectionSongPlayListServer {
     @Autowired
     private ConnectionSongPlayListRepository conSongPlayListRepository;
+
     public ErrorEnumForConSongPlayList save(ConnectionSongPlayListVO conSongPlayList){
         ConnectionSongPlayListEntity bean=new ConnectionSongPlayListEntity();
         try {
@@ -35,15 +35,7 @@ public class ConnectionSongPlayListServer {
         conSongPlayListRepository.deleteById(con.get().getId());
         return ErrorEnumForConSongPlayList.GOOD;
     }
-    public ErrorEnumForConSongPlayList delAllConByPlayListId(Long playListId){
-        try {
-            conSongPlayListRepository.DelAllConByPlayListId(playListId);
-            return ErrorEnumForConSongPlayList.GOOD;
-        }catch (Exception e){
-            System.out.println(e);
-            return ErrorEnumForConSongPlayList.CAN_NOT_DELETE;
-        }
-    }
+
 
 
 }
