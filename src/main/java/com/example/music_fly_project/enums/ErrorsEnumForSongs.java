@@ -8,6 +8,7 @@ public enum ErrorsEnumForSongs {
     SAVED_SUCCESSFULLY,
     YOURS_SONGS,
     LAYER,
-    THE_SAME_SONG
+    THE_SAME_SONG,
+    FTP_ERROR
 
 }

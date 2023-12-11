@@ -20,7 +20,7 @@ import java.util.List;
 public class AlbumsController {
     @Autowired
     private  AlbumsServer albumsServer;
-    @PostMapping(value = "/save",consumes = MediaType.APPLICATION_JSON_VALUE    )
+    @PostMapping(value = "/save",consumes = MediaType.APPLICATION_JSON_VALUE)
     public AlbumsVO save(@RequestBody AlbumsVO albumsVO){
         return albumsServer.save(albumsVO);
     }

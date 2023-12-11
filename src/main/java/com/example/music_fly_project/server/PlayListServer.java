@@ -78,6 +78,11 @@ public class PlayListServer {
         }
         List<PlayListVO> playListVO1;
         playListVO1=PlayListLogic.copyList(list.get());
+        int lenPlayList;
+        for (int i = 0; i < playListVO1.size(); i++) {
+            lenPlayList=getLengthPlayList(playListVO1.get(i).getId());
+            playListVO1.get(i).setLengthPlayList(lenPlayList);
+        }
         return playListVO1;
 
     }
@@ -90,7 +95,17 @@ public class PlayListServer {
         PlayListLogic playListLogic=new PlayListLogic();
         List<PlayListVO> listVOS;
         listVOS=playListLogic.copyList(list.get());
+        int lenPlayList;
+        for (int i = 0; i < listVOS.size(); i++) {
+            lenPlayList=getLengthPlayList(listVOS.get(i).getId());
+            listVOS.get(i).setLengthPlayList(lenPlayList);
+        }
         return listVOS;
+    }
+    private int getLengthPlayList(Long playListId){
+        int lengthPlayList;
+        lengthPlayList=playListRepository.getLengthPlayList(playListId);
+        return lengthPlayList;
     }
     public List<Long> getPlayListById(PlayListVO playListVO){
         Optional<List<Object[]>> list;
@@ -140,7 +155,7 @@ public class PlayListServer {
                 playListVOToUpdate.setUserId(playListEntity.get().getUserId());
                 playListVOToUpdate.setPublic1(playListEntity.get().isPublic1());
                 playListVOToUpdate.setDate(playListEntity.get().getDate());
-                playListVOToUpdate.setLengthPlayList(playListEntity.get().getLengthPlayList());
+                //playListVOToUpdate.setLengthPlayList(playListEntity.get().getLengthPlayList());
                 byte[] image=(byte[]) albumsEntity.get().get(0);
                 playListVOToUpdate.setImage(image);
                 update(playListVOToUpdate);
@@ -152,68 +167,10 @@ public class PlayListServer {
             playListVOToUpdate.setUserId(playListEntity.get().getUserId());
             playListVOToUpdate.setPublic1(playListEntity.get().isPublic1());
             playListVOToUpdate.setDate(playListEntity.get().getDate());
-            playListVOToUpdate.setLengthPlayList(playListEntity.get().getLengthPlayList());
+            //playListVOToUpdate.setLengthPlayList(playListEntity.get().getLengthPlayList());
             byte[]image=combineImages((byte[]) albumsEntity.get().get(0),(byte[]) albumsEntity.get().get(1),(byte[]) albumsEntity.get().get(2),(byte[]) albumsEntity.get().get(3));
             playListVOToUpdate.setImage(image);
             update(playListVOToUpdate);
-    }
-    private int getAudioLengthInSeconds(byte[] audioData) {
-        try {
-            TypeFormat t=getAudioFileType(audioData);
-            if(t==TypeFormat.MP3){
-                return getAudioLengthMP3(audioData);
-            }
-            Clip clip;
-            ByteArrayInputStream byteStream = new ByteArrayInputStream(audioData);
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(byteStream);
-            clip = AudioSystem.getClip();
-            clip.open(audioStream);
-            int sec= (int) (clip.getMicrosecondLength()/1000000);
-            return sec;
-        }catch (Exception e){
-            System.out.println(e);
-            return 0;
-        }
-    }
-    private static int calculateDuration(int fileSize, int bitRate) {
-        int durationInBytes = (fileSize * 8) / bitRate;
-        return durationInBytes / 1000; // מחזירים את המשך השיר בשניות
-    }
-    private int getAudioLengthMP3(byte[] mp3){
-            byte[] mp3Bytes = mp3; // קבלת מערך הבייטים המייצג את ה-mp3
-
-            int bitRate = 128;
-            int durationInSeconds = calculateDuration(mp3Bytes.length, bitRate);
-            System.out.println("אורך השיר: " + durationInSeconds + " שניות");
-            return durationInSeconds;
-
-    }
-    private TypeFormat getAudioFileType(byte[] audioBytes) {
-        if (audioBytes[0] == 0x52 && audioBytes[1] == 0x49 && audioBytes[2] == 0x46 && audioBytes[3] == 0x46) {
-                return TypeFormat.WAV;
-            }
-        return TypeFormat.MP3;
-        }
-    public void updateLengthPlayList(Long playListId,Long newSongId){
-        Optional<PlayListEntity> playListEntity;
-        playListEntity=geyById(playListId);
-        if(!playListEntity.isPresent()){
-            return;
-        }
-        Optional<Object[]> songsEntity;
-        songsEntity=playListRepository.getSongById(newSongId);
-        if(!songsEntity.isPresent()){
-            return;
-        }
-        SongsEntity songsEntity1=new SongsEntity();
-        songsEntity1.setTheSong((byte[]) songsEntity.get()[0]);
-        Security.decipherFromDB(songsEntity1);
-        songsEntity1.setTheSong(songsEntity1.getTheSong());
-        int sec=getAudioLengthInSeconds(songsEntity1.getTheSong());
-        PlayListVO playListVO=new PlayListVO();
-        BeanUtils.copyProperties(playListEntity.get(),playListVO);
-        playListVO.setLengthPlayList(sec+playListVO.getLengthPlayList());
-        update(playListVO);
     }
     private byte[] combineImages(byte[] image1, byte[] image2, byte[] image3, byte[] image4) {
         BufferedImage img1,img2,img3,img4;

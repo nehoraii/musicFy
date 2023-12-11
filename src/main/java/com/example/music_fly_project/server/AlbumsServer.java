@@ -3,6 +3,7 @@ package com.example.music_fly_project.server;
 import com.example.music_fly_project.entity.AlbumsEntity;
 import com.example.music_fly_project.entity.SongsEntity;
 import com.example.music_fly_project.enums.ErrorsEnumForAlbums;
+import com.example.music_fly_project.enums.TypeFormat;
 import com.example.music_fly_project.logic.AlbumsLogic;
 import com.example.music_fly_project.logic.Security;
 import com.example.music_fly_project.repository.AlbumsRepository;
@@ -12,6 +13,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +46,9 @@ public class AlbumsServer {
         if(!albums.isPresent()){
             return ErrorsEnumForAlbums.AlbumsNotFound;
         }
+        albumsRepository.DelAllConPlayList(id);
+        albumsRepository.DelAllSong(id);
+        albumsRepository.DelAllConAlbumSong(id);
         albumsRepository.deleteById(id);
         return ErrorsEnumForAlbums.GOOD;
     }
@@ -50,9 +58,6 @@ public class AlbumsServer {
         if(!albums.isPresent()){
             return ErrorsEnumForAlbums.AlbumsNotFound;
         }
-//        if(albumsVO.equals(albums.get())){
-//            return ErrorsEnumForAlbums.TheSameAlbum;
-//        }
         AlbumsEntity bean=new AlbumsEntity();
         BeanUtils.copyProperties(albumsVO,bean);
         albumsRepository.save(bean);
@@ -86,12 +91,20 @@ public class AlbumsServer {
             return null;
         }
         List listVo=new ArrayList<>();
+        int lenAlbum;
         for (int i = 0; i < list.get().size(); i++) {
             AlbumsVO albumsVO=new AlbumsVO();
             AlbumsLogic.copyProperty(list.get().get(i),albumsVO);
+            lenAlbum=getLengthAlbum(albumsVO.getId());
+            albumsVO.setLengthAlbum(lenAlbum);
             listVo.add(albumsVO);
         }
         return listVo;
+    }
+    private int getLengthAlbum(Long albumId){
+        int lengthAlbum;
+        lengthAlbum=albumsRepository.getLengthAlbum(albumId);
+        return lengthAlbum;
     }
     public AlbumsVO getAlbumById(Long albumId){
         Optional<AlbumsEntity> albumEntity;
@@ -124,9 +137,12 @@ public class AlbumsServer {
             return null;
         }
         List<AlbumsVO>listVo=new ArrayList<>();
+        int lenAlbum;
         for (int i = 0; i < listEntity.get().size(); i++) {
             AlbumsVO someAlbum=new AlbumsVO();
             BeanUtils.copyProperties(listEntity.get().get(i),someAlbum);
+            lenAlbum=getLengthAlbum(someAlbum.getId());
+            someAlbum.setLengthAlbum(lenAlbum);
             listVo.add(someAlbum);
         }
         return listVo;

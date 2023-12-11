@@ -18,13 +18,10 @@ import java.util.List;
 public class ConnectionSongPlayListController {
     @Autowired
     private ConnectionSongPlayListServer server;
-    @Autowired
-    private PlayListServer playListServer;
     @PostMapping("/save")
     public ErrorEnumForConSongPlayList save(@RequestBody ConnectionSongPlayListVO connectionSongPlayListVO){
         ErrorEnumForConSongPlayList e;
         e=server.save(connectionSongPlayListVO);
-        playListServer.updateLengthPlayList(connectionSongPlayListVO.getPlayListId(), connectionSongPlayListVO.getSongId());
         return e;
     }
     @DeleteMapping("/delete")

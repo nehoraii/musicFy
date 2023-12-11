@@ -9,7 +9,7 @@ public class AlbumsVO {
     private long userId;
     private String nameAlbum;
     private byte[] imageAlbum;
-    private long lengthAlbum;
+    private int lengthAlbum;
     private ErrorsEnumForAlbums e;
 
 }

@@ -2,26 +2,75 @@ package com.example.music_fly_project.controller;
 import com.example.music_fly_project.enums.ErrorsEnumForSongs;
 import com.example.music_fly_project.server.SongsServer;
 import com.example.music_fly_project.vo.*;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
+import java.util.Map;
 
 @Validated
 @RestController
 @RequestMapping("/Song")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 public class SongsController {
     @Autowired
     private SongsServer songsServer;
+    @PostMapping(value = "save2", consumes = "application/json")
+    public SongsVO save2(
+            @RequestHeader HttpHeaders headers,
+            @RequestBody Map<String, Object> requestMap) {
+
+        try {
+            int currentChunk = Integer.parseInt(headers.getFirst("X-Chunk-Number"));
+            int totalChunks = Integer.parseInt(headers.getFirst("X-Total-Chunks"));
+
+            List<String> chunks = (List<String>) requestMap.get("chunks");
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (String chunk : chunks) {
+                stringBuilder.append(chunk);
+            }
+
+            String jsonData = stringBuilder.toString();
+            ObjectMapper objectMapper=new ObjectMapper();
+            SongsVO s=objectMapper.readValue(jsonData,SongsVO.class);
+            // לחזור עם התשובה המתאימה, לדוגמא:
+            return s;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+
     @PostMapping(value = "/save")
     public SongsVO save(@RequestBody SongsVO songsVO){
         SongsVO e;
         e= songsServer.save(songsVO);
         return e;
     }
+   /* @PostMapping(value = "/save")
+    public SongsVO save2(@RequestBody SongsVO2 songsVO){
+        SongsVO e;
+        SongsVO s=new SongsVO();
+        byte[] arr=new byte[songsVO.getTheSong().size()];
+        for (int i = 0; i < songsVO.getTheSong().size(); i++) {
+            arr[i]=songsVO.getTheSong().get(i);
+        }
+        System.out.println("e");
+        e= songsServer.save(s);
+        return e;
+    }
+
+    */
     @DeleteMapping("/delete")
     public ErrorsEnumForSongs delete(@RequestBody SongsVO songsVO){
         ErrorsEnumForSongs e;

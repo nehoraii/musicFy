@@ -13,7 +13,6 @@ public class PlayListLogic {
             PlayListVO playListVO=new PlayListVO();
             playListVO.setDate(list.get(i).getDate());
             playListVO.setPlayListName(list.get(i).getPlayListName());
-            playListVO.setLengthPlayList(list.get(i).getLengthPlayList());
             playListVO.setId(list.get(i).getId());
             playListVO.setImage(list.get(i).getImage());
             playListVO.setPublic1(list.get(i).isPublic1());

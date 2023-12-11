@@ -2,7 +2,6 @@ package com.example.music_fly_project.logic;
 
 import com.example.music_fly_project.entity.SongsEntity;
 import com.example.music_fly_project.enums.ErrorsEnumForSongs;
-import com.example.music_fly_project.vo.SongVoClient;
 import com.example.music_fly_project.vo.SongsVO;
 import org.apache.tomcat.util.codec.binary.Base64;
 
@@ -67,7 +66,6 @@ public class SongsLogic {
         return list;
     }
     public static void copyProperty(SongsVO from, SongsEntity to){
-        to.setTheSong(from.getTheSong());
         to.setId(from.getId());
         to.setDate(from.getDate());
         to.setZaner(from.getZaner());
@@ -75,20 +73,10 @@ public class SongsLogic {
         to.setNameSong(from.getNameSong());
     }
     public static void copyProperty(SongsEntity from, SongsVO to){
-        to.setTheSong(from.getTheSong());
         to.setDate(from.getDate());
         to.setZaner(from.getZaner());
         to.setUserId(from.getUserId());
         to.setNameSong(from.getNameSong());
         to.setId(from.getId());
-    }
-    public static void copyProperty(SongVoClient from,SongsVO to){
-        to.setE(from.getE());
-        to.setDate(from.getDate());
-        to.setNameSong(from.getNameSong());
-        to.setZaner(from.getZaner());
-        to.setTheSong(Base64.decodeBase64(from.getTheSong()));
-        to.setId(from.getId());
-        to.setUserId(from.getUserId());
     }
 }

@@ -3,6 +3,7 @@ package com.example.music_fly_project.server;
 import com.example.music_fly_project.entity.AlbumsEntity;
 import com.example.music_fly_project.entity.SongsEntity;
 import com.example.music_fly_project.enums.ErrorsEnumForSongs;
+import com.example.music_fly_project.logic.FtpLogic;
 import com.example.music_fly_project.logic.Security;
 import com.example.music_fly_project.logic.SongsLogic;
 import com.example.music_fly_project.repository.SongsRepository;
@@ -15,6 +16,11 @@ import java.util.Optional;
 
 @Service
 public class SongsServer {
+    private String addressFtp="127.0.0.1";
+    private int portFtr=21;
+    private int userNameGet=2;
+    private int passGet=2;
+
     @Autowired
     private SongsRepository songsRepository;
     @Autowired
@@ -23,12 +29,22 @@ public class SongsServer {
     public SongsVO save(SongsVO songsVO) {
         Security.decipherFromClient(songsVO);
         SongsEntity bean = new SongsEntity();
-        SongsLogic.copyProperty(songsVO, bean);
         try {
-            Security.encodeToDB(bean);
+            Security.encodeToDB(songsVO);
+            SongsLogic.copyProperty(songsVO, bean);
             bean = songsRepository.save(bean);
-            Security.decipherFromDB(bean);
             SongsLogic.copyProperty(bean, songsVO);
+            Security.decipherFromDB(songsVO);
+            boolean sec=saveFtp(songsVO);
+            if(sec){
+                String path;
+                path=FtpLogic.getPath()+songsVO.getUserId()+"\\"+songsVO.getId();
+                songsVO.setSongPath(path);
+                update(songsVO);
+                songsVO.setE(ErrorsEnumForSongs.GOOD);
+                return songsVO;
+            }
+            songsVO.setE(ErrorsEnumForSongs.FTP_ERROR);
         } catch (Exception e) {
             System.out.println(e);
             songsVO.setE(ErrorsEnumForSongs.NOT_SAVED_SUCCESSFULLY);
@@ -38,7 +54,11 @@ public class SongsServer {
         Security.encodeToClient(songsVO);
         return songsVO;
     }
-    public ErrorsEnumForSongs delete(long id){
+    private boolean saveFtp(SongsVO songsVO) {
+        boolean sec=FtpLogic.uploadFile(addressFtp,portFtr,songsVO.getUserId(),songsVO.getUserId(),songsVO.getTheSong(),songsVO.getId());
+        return sec;
+    }
+     public ErrorsEnumForSongs delete(long id){
         Optional<SongsEntity> songE=geyById(id);
         if(!songE.isPresent()){
             return ErrorsEnumForSongs.SONG_NOT_FOUND;
@@ -53,6 +73,7 @@ public class SongsServer {
             return ErrorsEnumForSongs.SONG_NOT_FOUND;
         }
         SongsEntity bean= new SongsEntity();
+        Security.encodeToDB(songsVO);
         BeanUtils.copyProperties(songsVO,bean);
         songsRepository.save(bean);
         return ErrorsEnumForSongs.GOOD;
@@ -68,8 +89,11 @@ public class SongsServer {
     }
     public SongsVO getSongById(SongsVO songsVO){
         SongsEntity songsEntity=getSongById(songsVO.getId());
-        Security.decipherFromDB(songsEntity);
         BeanUtils.copyProperties(songsEntity,songsVO);
+        Security.decipherFromDB(songsVO);
+        //byte arr[]=FtpLogic.requestFileFromServer(addressFtp,portFtr,-1,-1,Long.toString(songsVO.getUserId())+"\\"+Long.toString(songsVO.getId()));
+        byte arr[]=FtpLogic.requestFileFromServer(addressFtp,portFtr,userNameGet,passGet,songsVO.getSongPath());
+        songsVO.setTheSong(arr);
         Security.encodeToClient(songsVO);
         return songsVO;
     }
@@ -77,11 +101,9 @@ public class SongsServer {
         Optional<List<SongsEntity>> songsEntity;
         try {
             Security.decipherFromClient(songsVO);
-            SongsEntity songsEntity1=new SongsEntity();
-            SongsLogic.copyProperty(songsVO,songsEntity1);
-            Security.encodeToDB(songsEntity1);
-            System.out.println(songsEntity1.getNameSong());
-            String name=songsEntity1.getNameSong();
+            Security.encodeToDB(songsVO);
+            System.out.println(songsVO.getNameSong());
+            String name=songsVO.getNameSong();
             songsEntity=songsRepository.getSongByName(name, songsVO.getId(),limitToSearch);
         }catch (Exception e){
             System.out.println(e);

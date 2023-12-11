@@ -33,9 +33,6 @@ public class SongsEntity implements Serializable {
     @Column(name = "user_id")
     private long userId;
     @Basic(optional = false)
-    @Column(name = "the_song",columnDefinition = "bytea")
-    private byte[] theSong;
-    @Basic(optional = false)
     @Column(name = "zaner")
     private String zaner;
     @Column(name = "date")
@@ -45,4 +42,6 @@ public class SongsEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "name_song")
     private String nameSong;
+    @Column(name="song_path")
+    private String songPath;
 }

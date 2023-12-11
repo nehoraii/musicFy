@@ -43,7 +43,7 @@ public class Security {
             songsVO.setZaner(zaner);
         }
     }
-    public static void encodeToDB(SongsEntity songsEntity){
+    public static void encodeToDB(SongsVO songsEntity){
         if(songsEntity.getTheSong()!=null){
             byte[] arr=songsEntity.getTheSong();
             FunSong(arr,true,numToDB);
@@ -61,12 +61,25 @@ public class Security {
             songsEntity.setZaner(zaner);
         }
     }
-    public static void decipherFromDB(SongsEntity songsEntity){
+    public static void decipherFromDB(SongsVO songsEntity){
         if(songsEntity.getTheSong()!=null){
             byte[] arr=songsEntity.getTheSong();
             FunSong(arr,false,numToDB);
             songsEntity.setTheSong(arr);
         }
+        if(songsEntity.getNameSong()!=null){
+            //מיוחד כדי שנוכל לעשות LIKE
+            String nameSong=songsEntity.getNameSong();
+            nameSong=removingToAllString(nameSong,specialNumToSongName());
+            songsEntity.setNameSong(nameSong);
+        }
+        if(songsEntity.getZaner()!=null){
+            String zaner=songsEntity.getZaner();
+            zaner=FunZaner(zaner,false,numToDB);
+            songsEntity.setZaner(zaner);
+        }
+    }
+    public static void decipherFromDB(SongsEntity songsEntity){
         if(songsEntity.getNameSong()!=null){
             //מיוחד כדי שנוכל לעשות LIKE
             String nameSong=songsEntity.getNameSong();

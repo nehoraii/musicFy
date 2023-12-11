@@ -2,6 +2,7 @@ package com.example.music_fly_project.controller;
 
 import com.example.music_fly_project.enums.ErrorsEnumForAlbums;
 import com.example.music_fly_project.enums.ErrosEnumForConnectionSongAlbum;
+import com.example.music_fly_project.server.AlbumsServer;
 import com.example.music_fly_project.server.ConnectionSongAlbumServer;
 import com.example.music_fly_project.server.SongsServer;
 import com.example.music_fly_project.vo.AlbumsVO;
@@ -21,6 +22,8 @@ import java.util.Objects;
 public class ConnectionSongAlbumController {
     @Autowired
     private ConnectionSongAlbumServer connectionSongAlbumServer;
+    @Autowired
+    private AlbumsServer albumsServer;
     @Autowired
     private SongsServer songsServer;
     @PostMapping("/save")

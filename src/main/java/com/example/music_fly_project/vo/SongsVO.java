@@ -12,5 +12,6 @@ public class SongsVO {
     private String zaner;
     private Date date;
     private String nameSong;
+    private String songPath;
     private ErrorsEnumForSongs e;
 }

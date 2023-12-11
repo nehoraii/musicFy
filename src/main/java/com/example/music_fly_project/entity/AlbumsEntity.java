@@ -39,6 +39,4 @@ public class AlbumsEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "image_album",columnDefinition = "bytea")
     private byte[] imageAlbum;
-    @Column(name = "length_album")
-    private long lengthAlbum;
 }
