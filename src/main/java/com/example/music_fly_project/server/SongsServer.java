@@ -16,16 +16,15 @@ import java.util.Optional;
 
 @Service
 public class SongsServer {
-    private String addressFtp="127.0.0.1";
-    private int portFtr=21;
-    private int userNameGet=2;
-    private int passGet=2;
+
+    private int chunkSize=1024*1024;
 
     @Autowired
     private SongsRepository songsRepository;
     @Autowired
     private ConnectionSongAlbumServer connectionSongAlbumServer;
     private int limitToSearch=5;
+    private int chuckSize=1024*1024;
     public SongsVO save(SongsVO songsVO) {
         Security.decipherFromClient(songsVO);
         SongsEntity bean = new SongsEntity();
@@ -38,31 +37,33 @@ public class SongsServer {
             boolean sec=saveFtp(songsVO);
             if(sec){
                 String path;
-                path=FtpLogic.getPath()+songsVO.getUserId()+"\\"+songsVO.getId();
+                path=FtpLogic.getPath()+"\\"+songsVO.getUserId()+"\\"+songsVO.getId();
                 songsVO.setSongPath(path);
                 update(songsVO);
                 songsVO.setE(ErrorsEnumForSongs.GOOD);
                 return songsVO;
             }
             songsVO.setE(ErrorsEnumForSongs.FTP_ERROR);
+            return songsVO;
         } catch (Exception e) {
             System.out.println(e);
             songsVO.setE(ErrorsEnumForSongs.NOT_SAVED_SUCCESSFULLY);
             return songsVO;
         }
-        songsVO.setE(ErrorsEnumForSongs.GOOD);
-        Security.encodeToClient(songsVO);
-        return songsVO;
     }
     private boolean saveFtp(SongsVO songsVO) {
-        boolean sec=FtpLogic.uploadFile(addressFtp,portFtr,songsVO.getUserId(),songsVO.getUserId(),songsVO.getTheSong(),songsVO.getId());
+        Security.encodeToDB(songsVO);
+        boolean sec=FtpLogic.uploadFile(songsVO.getUserId(),songsVO.getUserId(),songsVO.getTheSong(),songsVO.getId());
+        Security.decipherFromDB(songsVO);
         return sec;
     }
-     public ErrorsEnumForSongs delete(long id){
+    public ErrorsEnumForSongs delete(long id){
         Optional<SongsEntity> songE=geyById(id);
         if(!songE.isPresent()){
             return ErrorsEnumForSongs.SONG_NOT_FOUND;
         }
+        SongsEntity s=getSongById(id);
+        FtpLogic.deleteFile(s.getSongPath(),s.getUserId(),s.getUserId());
         connectionSongAlbumServer.delConBySongId(id);
         songsRepository.deleteById(id);
         return ErrorsEnumForSongs.GOOD;
@@ -90,11 +91,51 @@ public class SongsServer {
     public SongsVO getSongById(SongsVO songsVO){
         SongsEntity songsEntity=getSongById(songsVO.getId());
         BeanUtils.copyProperties(songsEntity,songsVO);
-        Security.decipherFromDB(songsVO);
+        //Security.decipherFromDB(songsVO);
         //byte arr[]=FtpLogic.requestFileFromServer(addressFtp,portFtr,-1,-1,Long.toString(songsVO.getUserId())+"\\"+Long.toString(songsVO.getId()));
-        byte arr[]=FtpLogic.requestFileFromServer(addressFtp,portFtr,userNameGet,passGet,songsVO.getSongPath());
+        byte arr[]=FtpLogic.requestFileFromServer(songsVO.getSongPath());
         songsVO.setTheSong(arr);
+        Security.decipherFromDB(songsVO);
         Security.encodeToClient(songsVO);
+        return songsVO;
+    }
+    public SongVoController getSongProperty(SongVoController songsVOCon) {
+        SongsEntity songsEntity = getSongById(songsVOCon.getId());
+        Security.decipherFromDB(songsEntity);
+        BeanUtils.copyProperties(songsEntity,songsVOCon);
+        byte[] arr=FtpLogic.requestFileFromServer(songsEntity.getSongPath());
+        double sizeChunk=arr.length/(chuckSize*1.0);
+        int size = (int) Math.ceil(sizeChunk);
+        songsVOCon.setAmountOfChunks(size);
+        SongsVO songsVO=new SongsVO();
+        BeanUtils.copyProperties(songsVOCon,songsVO);
+        Security.encodeToClient(songsVO);
+        BeanUtils.copyProperties(songsVO,songsVOCon);
+        return songsVOCon;
+    }
+    public SongVoController getChunkId(SongVoController songsVOCon) {
+        SongVoController songsVO = new SongVoController();
+        SongsEntity s = getSongById(songsVOCon.getId());
+        byte arr[];
+        byte song[];
+        arr = FtpLogic.requestFileFromServer(s.getSongPath());
+        int startIndex = songsVOCon.getChunkNum() * chunkSize;
+        int lenOfRetArr = arr.length - (songsVOCon.getChunkNum() * chunkSize);
+        if(lenOfRetArr>=chunkSize){
+            song = new byte[chunkSize];
+            lenOfRetArr=chunkSize;
+        }
+        else {
+            song = new byte[lenOfRetArr];
+        }
+        for (int i = startIndex; i < startIndex + lenOfRetArr; i++) {
+            song[i - startIndex] = arr[i];
+            }
+        songsVO.setTheSong(song);
+        SongsVO songsVO1=new SongsVO();
+        BeanUtils.copyProperties(songsVO,songsVO1);
+        Security.encodeToClient(songsVO1);
+        BeanUtils.copyProperties(songsVO1,songsVO);
         return songsVO;
     }
     public List<SongsVO> getSongByName(SongsVO songsVO){

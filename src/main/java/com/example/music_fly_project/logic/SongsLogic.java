@@ -2,6 +2,7 @@ package com.example.music_fly_project.logic;
 
 import com.example.music_fly_project.entity.SongsEntity;
 import com.example.music_fly_project.enums.ErrorsEnumForSongs;
+import com.example.music_fly_project.vo.SongVoController;
 import com.example.music_fly_project.vo.SongsVO;
 import org.apache.tomcat.util.codec.binary.Base64;
 
@@ -79,4 +80,5 @@ public class SongsLogic {
         to.setNameSong(from.getNameSong());
         to.setId(from.getId());
     }
+
 }

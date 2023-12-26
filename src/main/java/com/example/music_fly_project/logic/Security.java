@@ -5,6 +5,7 @@ import com.example.music_fly_project.vo.SongsVO;
 
 public class Security {
     private static int numToClient=7;
+    private static int keyMain=2;
     private static int numToDB=3;
     private static int specialNumToSongName(){
         return 31;
@@ -93,9 +94,13 @@ public class Security {
         }
     }
     private static void FunSong(byte[]arr ,boolean status,int divisionNumber){
+        int a=arr[0];
+        int b=arr[arr.length-1];
         int key=(arr[0]+arr[arr.length-1])/divisionNumber;
         System.out.println(key);
         if(status){
+            System.out.println("key: " + key);
+            System.out.println("a = " + a + " b = " + b);
             adding(arr,key);
             rotateArrayByKey(arr,key,1,arr.length-2);
             return;
@@ -142,7 +147,6 @@ public class Security {
     }
     private static void reverseRotateArrayByKey(byte[] arr, int key, int startIndex, int endIndex) {
         int rotations = key % (endIndex - startIndex + 1);
-        System.out.println("rotate:"+rotations);
         for (int j = 0; j < rotations; j++) {
             byte temp = arr[endIndex];
             for (int i = endIndex; i > startIndex; i--) {
@@ -172,6 +176,7 @@ public class Security {
     }
     private static void rotateArrayByKey(byte[] arr, int key, int startIndex, int endIndex) {
         int rotations = key % (endIndex - startIndex + 1);
+        rotations=Math.abs(rotations);
         for (int j = 0; j < rotations; j++) {
             byte temp = arr[startIndex];
             for (int i = startIndex; i < endIndex; i++) {

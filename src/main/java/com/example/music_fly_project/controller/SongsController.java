@@ -1,10 +1,12 @@
 package com.example.music_fly_project.controller;
 import com.example.music_fly_project.enums.ErrorsEnumForSongs;
+import com.example.music_fly_project.logic.Security;
 import com.example.music_fly_project.server.SongsServer;
 import com.example.music_fly_project.vo.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,7 +21,7 @@ import java.util.Map;
 @Validated
 @RestController
 @RequestMapping("/Song")
-@CrossOrigin(origins = "*",allowedHeaders = "*")
+@CrossOrigin(origins = "*")
 public class SongsController {
     @Autowired
     private SongsServer songsServer;
@@ -95,6 +97,17 @@ public class SongsController {
         SongsVO song=songsServer.getSongById(songsVO);
         return song;
     }
+    @PostMapping("/getProperties")
+    public SongVoController getSongProperty(@RequestBody SongVoController songVoController){
+        songVoController=songsServer.getSongProperty(songVoController);
+        return songVoController;
+    }
+    @PostMapping("/getChunk")
+    public SongVoController getTheSongById2(@RequestBody SongVoController songsVO){
+        SongVoController song=songsServer.getChunkId(songsVO);
+        return song;
+    }
+
     @PostMapping("/getSongByName")
     public List<SongsVO> getSongByName(@RequestBody SongsVO songsVO){
         List<SongsVO> list=songsServer.getSongByName(songsVO);

@@ -38,5 +38,7 @@ public interface AlbumsRepository extends JpaRepository<AlbumsEntity,Long> {
      */
     @Query("SELECT COUNT(c) FROM ConnectionSongAlbumEntity c WHERE c.albumId=:albumId")
     int getLengthAlbum(@Param("albumId") Long albumId);
+    @Query("SELECT s.songPath,s.userId FROM SongsEntity s JOIN ConnectionSongAlbumEntity c ON c.songId=s.id WHERE c.albumId=:albumId")
+    Optional<List<Object[]>> getSongsPath(@Param("albumId") long albumId);
 
 }

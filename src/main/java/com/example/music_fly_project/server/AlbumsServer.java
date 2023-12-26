@@ -5,6 +5,7 @@ import com.example.music_fly_project.entity.SongsEntity;
 import com.example.music_fly_project.enums.ErrorsEnumForAlbums;
 import com.example.music_fly_project.enums.TypeFormat;
 import com.example.music_fly_project.logic.AlbumsLogic;
+import com.example.music_fly_project.logic.FtpLogic;
 import com.example.music_fly_project.logic.Security;
 import com.example.music_fly_project.repository.AlbumsRepository;
 import com.example.music_fly_project.vo.AlbumsVO;
@@ -25,6 +26,8 @@ import java.util.Optional;
 public class AlbumsServer {
     @Autowired
     private AlbumsRepository albumsRepository;
+    @Autowired
+    private SongsServer songsServer;
     private int limitAlbumsSearch=5;
     public AlbumsVO save(AlbumsVO albumsVO){
         AlbumsEntity bean =new AlbumsEntity();
@@ -45,6 +48,12 @@ public class AlbumsServer {
         albums=getById(id);
         if(!albums.isPresent()){
             return ErrorsEnumForAlbums.AlbumsNotFound;
+        }
+        Optional<List<Object[]>> songsPath=albumsRepository.getSongsPath(id);
+        if(songsPath.isPresent()){
+            for (int i = 0; i < songsPath.get().size(); i++) {
+                FtpLogic.deleteFile((String) songsPath.get().get(i)[0],(Long)songsPath.get().get(i)[1],(Long)songsPath.get().get(i)[1]);
+            }
         }
         albumsRepository.DelAllConPlayList(id);
         albumsRepository.DelAllSong(id);
