@@ -2,9 +2,9 @@ package com.example.music_fly_project.server;
 
 import com.example.music_fly_project.entity.ConnectionSongPlayListEntity;
 import com.example.music_fly_project.enums.ErrorEnumForConSongPlayList;
+import com.example.music_fly_project.enums.ErrosEnumForConnectionSongAlbum;
 import com.example.music_fly_project.repository.ConnectionSongPlayListRepository;
 import com.example.music_fly_project.vo.ConnectionSongPlayListVO;
-import com.example.music_fly_project.vo.PlayListVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +20,10 @@ public class ConnectionSongPlayListServer {
         ConnectionSongPlayListEntity bean=new ConnectionSongPlayListEntity();
         try {
             BeanUtils.copyProperties(conSongPlayList,bean);
+            Optional<ConnectionSongPlayListEntity> connectionSongPlayListEntities=conSongPlayListRepository.getConBySongIdAndPlayListId(conSongPlayList.getSongId(),conSongPlayList.getPlayListId());
+            if(connectionSongPlayListEntities.isPresent()){
+                return ErrorEnumForConSongPlayList.CONNECTION_EXISTS;
+            }
             conSongPlayListRepository.save(bean);
         }catch (Exception e){
             return ErrorEnumForConSongPlayList.NOT_SAVED_SUCCESSFULLY;
@@ -35,7 +39,14 @@ public class ConnectionSongPlayListServer {
         conSongPlayListRepository.deleteById(con.get().getId());
         return ErrorEnumForConSongPlayList.GOOD;
     }
-
-
+    public ErrorEnumForConSongPlayList delCon(long songId){
+        try {
+            conSongPlayListRepository.DelConBySongId(songId);
+            return ErrorEnumForConSongPlayList.GOOD;
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return ErrorEnumForConSongPlayList.CAN_NOT_DELETE;
+    }
 
 }

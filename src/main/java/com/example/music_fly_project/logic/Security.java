@@ -5,11 +5,8 @@ import com.example.music_fly_project.vo.SongsVO;
 
 public class Security {
     private static int numToClient=7;
-    private static int keyMain=2;
     private static int numToDB=3;
-    private static int specialNumToSongName(){
-        return 31;
-    }
+    private static int specialNumToSongName(){return 31;}
     public static void encodeToClient(SongsVO songsVO){
         if(songsVO.getTheSong()!=null){
             byte[] arr=songsVO.getTheSong();
@@ -98,6 +95,9 @@ public class Security {
         int b=arr[arr.length-1];
         int key=(arr[0]+arr[arr.length-1])/divisionNumber;
         System.out.println(key);
+        if(key==0){
+            return;
+        }
         if(status){
             System.out.println("key: " + key);
             System.out.println("a = " + a + " b = " + b);
@@ -110,6 +110,9 @@ public class Security {
     }
     private static String FunName(String str ,boolean status,int  divisionNumber){
         int key=(str.charAt(0)+str.charAt(str.length()-1))/divisionNumber;
+        if(key==0){
+            return str;
+        }
         if(status){
             str=adding(str,key);
             return str;
@@ -119,6 +122,9 @@ public class Security {
     }
     private static String FunZaner(String str , boolean status, int divisionNumber){
         int key=(str.charAt(0)+str.charAt(str.length()-1))/divisionNumber;
+        if(key==0){
+            return str;
+        }
         if(status){
             str=removeAdding(str,key);
             return str;
@@ -176,7 +182,6 @@ public class Security {
     }
     private static void rotateArrayByKey(byte[] arr, int key, int startIndex, int endIndex) {
         int rotations = key % (endIndex - startIndex + 1);
-        rotations=Math.abs(rotations);
         for (int j = 0; j < rotations; j++) {
             byte temp = arr[startIndex];
             for (int i = startIndex; i < endIndex; i++) {

@@ -14,7 +14,7 @@ public class FtpLogic {
     public static String getPath(){
         return pathToSaveSong;
     }
-    public static boolean uploadFile(long user, long pass, byte[] song,long nameFile) {
+    public static boolean uploadFile(long user, long pass,long songId, byte[] song,long nameFile) {
         FTPClient ftpClient = new FTPClient();
 
         try {
@@ -29,7 +29,7 @@ public class FtpLogic {
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
             ByteArrayInputStream inputStream = new ByteArrayInputStream(song);
-            String pathToSave=pathToSaveSong+"\\"+user+"\\"+nameFile;
+            String pathToSave=pathToSaveSong + "\\" + user + "\\" + songId +"\\" + nameFile;
             System.out.println("Start uploading file");
             boolean done = ftpClient.storeFile(pathToSave, inputStream);
             inputStream.close();
@@ -136,13 +136,13 @@ public class FtpLogic {
 
             // יצירת OutputStream עבור הקובץ המקומי שבו נשמור את הקובץ המורד
             // בקשה להוריד את הקובץ מהשרת
-            System.out.println("Start delete file from server");
-            boolean success = ftpClient.makeDirectory(getPath()+"\\"+Long.toString(songId));
+            System.out.println("Start create dir from server");
+            boolean success = ftpClient.makeDirectory(getPath()+"\\"+Long.toString(user)+"\\"+Long.toString(songId));
             if (success) {
-                System.out.println("The file is delete successfully.");
+                System.out.println("The create dir successfully.");
 
             } else {
-                System.out.println("Failed to delete the file.");
+                System.out.println("Failed create dir.");
                 return false;
             }
         } catch (IOException e) {
@@ -158,6 +158,36 @@ public class FtpLogic {
             }
         }
         return true;
+    }
+    public static int getAmountOfFiles(String path){
+        FTPClient ftpClient = new FTPClient();
+        try {
+            ftpClient.connect(server, port);
+            boolean sec=ftpClient.login(userRequest,passRequest);
+            if(sec==false){
+                return 0;
+            }
+            ftpClient.enterLocalPassiveMode();
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            ftpClient.changeWorkingDirectory(path);
+
+            // יצירת OutputStream עבור הקובץ המקומי שבו נשמור את הקובץ המורד
+            // בקשה להוריד את הקובץ מהשרת
+            int length = ftpClient.listFiles().length;
+            return length;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ftpClient.isConnected()) {
+                    ftpClient.logout();
+                    ftpClient.disconnect();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return -1;
     }
     public static boolean deleteDirectory(long songId,long user,long pass){
         FTPClient ftpClient = new FTPClient();

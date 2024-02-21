@@ -23,6 +23,8 @@ public interface PlayListRepository extends JpaRepository<PlayListEntity,Long> {
     Optional<List<Object[]>>getPlayListByPlayListId(@Param("playListId")long playListId);
     @Query("SELECT s FROM SongsEntity s JOIN ConnectionSongPlayListEntity e ON s.id=e.songId WHERE e.playListId=:playListId")
     Optional<List<SongsEntity>>getPlayListInfoByPlayListId(@Param("playListId")long playListId);
+    /*@Query(value = "SELECT songs.id,user_id,zaner,date,name_song,song_path FROM songs JOIN connection_song_play_list ON songs.id=connection_song_play_list.song_id WHERE connection_song_play_list.play_list_id=?1",nativeQuery = true)
+    Optional<List<Object[]>>getPlayListInfoByPlayListId2(long playListId);*/
     @Query(value = "SELECT DISTINCT albums.image_album FROM albums JOIN connection_song_album ON albums.id = connection_song_album.album_id JOIN songs ON songs.id = connection_song_album.song_id JOIN connection_song_play_list ON connection_song_play_list.song_id = songs.id JOIN play_list ON play_list.id = connection_song_play_list.play_list_id WHERE play_list.id =:playListId LIMIT 4",nativeQuery = true)
     Optional<List<Object>> getAlbumsFromPlayList(@Param("playListId")Long playListId);
     /*@Query("SELECT s.theSong FROM SongsEntity s WHERE s.id=:songId")

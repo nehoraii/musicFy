@@ -1,13 +1,10 @@
 package com.example.music_fly_project.server;
 
-import javax.sound.sampled.*;
-
 import java.io.*;
 
 import com.example.music_fly_project.entity.PlayListEntity;
 import com.example.music_fly_project.entity.SongsEntity;
 import com.example.music_fly_project.enums.ErrorsEnumForPlayList;
-import com.example.music_fly_project.enums.TypeFormat;
 import com.example.music_fly_project.logic.PlayListLogic;
 import com.example.music_fly_project.logic.Security;
 import com.example.music_fly_project.repository.PlayListRepository;
@@ -20,8 +17,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -72,7 +67,7 @@ public class PlayListServer {
     }
     public List<PlayListVO> getPlayListByName(PlayListVO playListVO) {
         Optional<List<PlayListEntity>>list;
-        list=playListRepository.getPlayListByName(playListVO.getPlayListName(), playListVO.getId(),limitPlayListSearch);
+            list=playListRepository.getPlayListByName(playListVO.getPlayListName(), playListVO.getId(),limitPlayListSearch);
         if(!list.isPresent()){
             return null;
         }
@@ -209,4 +204,35 @@ public class PlayListServer {
 
         return imageInByte;
     }
+    /*public List<SongsVO> getPlayListInfoById2(PlayListVO playListVO){
+        Optional<List<SongsEntity>> list=null;
+        Optional<List<Object[]>> listObg;
+        listObg=playListRepository.getPlayListInfoByPlayListId2(playListVO.getId());
+        for (int i = 0; i < listObg.get().size(); i++) {
+            SongsEntity songsEntity=new SongsEntity();
+            songsEntity.setId((Long) listObg.get().get(i)[0]);
+            songsEntity.setUserId((Long) listObg.get().get(i)[1]);
+            songsEntity.setZaner((String) listObg.get().get(i)[2]);
+            songsEntity.setDate((Date) listObg.get().get(i)[3]);
+            songsEntity.setNameSong((String) listObg.get().get(i)[4]);
+            songsEntity.setSongPath((String) listObg.get().get(i)[5]);
+            list.get().add(songsEntity);
+
+        }
+        if(!list.isPresent()){
+            return null;
+        }
+        List<SongsVO> listVo = new ArrayList<>();
+        for (int i = 0; i < list.get().size(); i++) {
+            SongsEntity songsEntity=new SongsEntity();
+            SongsVO songsVO=new SongsVO();
+            BeanUtils.copyProperties(list.get().get(i),songsEntity);
+            Security.decipherFromDB(songsEntity);
+            BeanUtils.copyProperties(songsEntity,songsVO);
+            Security.encodeToClient(songsVO);
+            listVo.add(songsVO);
+        }
+        return listVo;
+    }
+    */
 }

@@ -8,6 +8,7 @@ public class SongVoController {
     private long id;
     private long userId;
     private byte[] theSong;
+    private Date date;
     private String nameSong;
     private String zaner;
     private int amountOfChunks;

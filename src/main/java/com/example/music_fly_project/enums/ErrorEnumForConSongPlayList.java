@@ -4,5 +4,6 @@ public enum ErrorEnumForConSongPlayList {
     NOT_SAVED_SUCCESSFULLY,
     GOOD,
     CONNECTION_NOT_FOUND,
-    CAN_NOT_DELETE
+    CAN_NOT_DELETE,
+    CONNECTION_EXISTS
 }
