@@ -33,9 +33,9 @@ public class ConnectionSongPlayListEntity implements Serializable {
     private Long id;
     @Basic(optional = false)
     @Column(name = "play_list_id")
-    private long playListId;
+    private Long playListId;
     @Basic(optional = false)
     @Column(name = "song_id")
-    private long songId;
+    private Long songId;
 
 }

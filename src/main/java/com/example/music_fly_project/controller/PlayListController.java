@@ -6,10 +6,7 @@ import com.example.music_fly_project.vo.PlayListVO;
 import com.example.music_fly_project.vo.SongsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Validated
@@ -29,12 +26,14 @@ public class PlayListController {
         e= playListServer.delete(playListVO.getId());
         return e;
     }
-    @PutMapping("/update")
+    /*@PutMapping("/update")
     public ErrorsEnumForPlayList update(@RequestBody PlayListVO playListVO){
         ErrorsEnumForPlayList e;
         e=playListServer.update(playListVO);
         return e;
     }
+
+     */
     @PostMapping("getPlayListByName")
     public List<PlayListVO> getPlayListByName(@RequestBody PlayListVO playListVO){
         List<PlayListVO> list;
@@ -52,7 +51,7 @@ public class PlayListController {
         playListServer.changeImagePlayList(playListVO.getId());
     }
     @PostMapping("/getPlayListByPlayListId")
-    public List<Long> getPlayListByPlayListId(@RequestBody PlayListVO playListVO){
+    public List<Long> getSongsIdByPlayListId(@RequestBody PlayListVO playListVO){
         List<Long>listId;
         listId=playListServer.getPlayListById(playListVO);
         return listId;

@@ -21,17 +21,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "songs",schema = "public",catalog = "music_fly_project")
-public class SongsEntity implements Serializable {
+public class SongsEntity {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
-    private long id;
+    private Long id;
     @Basic(optional = false)
     @Column(name = "user_id")
-    private long userId;
+    private Long userId;
     @Basic(optional = false)
     @Column(name = "zaner")
     private String zaner;

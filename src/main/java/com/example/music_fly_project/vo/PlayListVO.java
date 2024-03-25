@@ -7,7 +7,7 @@ import java.util.Date;
 @Data
 public class PlayListVO {
     private Long id;
-    private long userId;
+    private Long userId;
     private String playListName;
     private int lengthPlayList;
     private boolean public1;

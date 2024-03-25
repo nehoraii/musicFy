@@ -6,91 +6,93 @@ import com.example.music_fly_project.vo.SongsVO;
 public class Security {
     private static int numToClient=7;
     private static int numToDB=3;
-    private static int specialNumToSongName(){return 31;}
+    private static int specialNumToSongName=  31;
     public static void encodeToClient(SongsVO songsVO){
         if(songsVO.getTheSong()!=null){
             byte[] arr=songsVO.getTheSong();
-            FunSong(arr,true,numToClient);
+            funSong(arr,true,numToClient);
             songsVO.setTheSong(arr);
         }
         if(songsVO.getNameSong()!=null){
             String nameSong=songsVO.getNameSong();
-            nameSong=FunName(nameSong,true,numToClient);
+            nameSong=funName(nameSong,true,numToClient);
             songsVO.setNameSong(nameSong);
         }
         if(songsVO.getZaner()!=null){
             String zaner=songsVO.getZaner();
-            zaner=FunZaner(zaner,true,numToClient);
+            zaner=funZaner(zaner,true,numToClient);
             songsVO.setZaner(zaner);
         }
     }
     public static void decipherFromClient(SongsVO songsVO){
         if(songsVO.getTheSong()!=null){
             byte[] arr=songsVO.getTheSong();
-            FunSong(arr,false,numToClient);
+            funSong(arr,false,numToClient);
             songsVO.setTheSong(arr);
         }
         if(songsVO.getNameSong()!=null){
             String nameSong=songsVO.getNameSong();
-            nameSong=FunName(nameSong,false,numToClient);
+            nameSong=funName(nameSong,false,numToClient);
             songsVO.setNameSong(nameSong);
         }
         if(songsVO.getZaner()!=null){
             String zaner=songsVO.getZaner();
-            zaner=FunZaner(zaner,false,numToClient);
+            zaner=funZaner(zaner,false,numToClient);
             songsVO.setZaner(zaner);
         }
     }
-    public static void encodeToDB(SongsVO songsEntity){
-        if(songsEntity.getTheSong()!=null){
-            byte[] arr=songsEntity.getTheSong();
-            FunSong(arr,true,numToDB);
-            songsEntity.setTheSong(arr);
+    public static void encodeToDB(SongsVO songsVO){
+        if(songsVO.getTheSong()!=null){
+            byte[] arr=songsVO.getTheSong();
+            funSong(arr,true,numToDB);
+            songsVO.setTheSong(arr);
         }
-        if(songsEntity.getNameSong()!=null){
+        if(songsVO.getNameSong()!=null){
             //מיוחד כדי שנוכל לעשות LIKE
-            String nameSong=songsEntity.getNameSong();
-            nameSong=addingToAllString(nameSong,specialNumToSongName());
-            songsEntity.setNameSong(nameSong);
+            String nameSong=songsVO.getNameSong();
+            nameSong=addingToAllString(nameSong,specialNumToSongName);
+            songsVO.setNameSong(nameSong);
         }
-        if(songsEntity.getZaner()!=null){
-            String zaner=songsEntity.getZaner();
-            zaner=FunZaner(zaner,true,numToDB);
-            songsEntity.setZaner(zaner);
+        if(songsVO.getZaner()!=null){
+            String zaner=songsVO.getZaner();
+            zaner=funZaner(zaner,true,numToDB);
+            songsVO.setZaner(zaner);
         }
     }
     public static void decipherFromDB(SongsVO songsEntity){
         if(songsEntity.getTheSong()!=null){
             byte[] arr=songsEntity.getTheSong();
-            FunSong(arr,false,numToDB);
+            funSong(arr,false,numToDB);
             songsEntity.setTheSong(arr);
         }
         if(songsEntity.getNameSong()!=null){
             //מיוחד כדי שנוכל לעשות LIKE
             String nameSong=songsEntity.getNameSong();
-            nameSong=removingToAllString(nameSong,specialNumToSongName());
+            nameSong=removingToAllString(nameSong,specialNumToSongName);
             songsEntity.setNameSong(nameSong);
         }
         if(songsEntity.getZaner()!=null){
             String zaner=songsEntity.getZaner();
-            zaner=FunZaner(zaner,false,numToDB);
+            zaner=funZaner(zaner,false,numToDB);
             songsEntity.setZaner(zaner);
         }
     }
-    public static void decipherFromDB(SongsEntity songsEntity){
+    /*public static void decipherFromDB(SongsEntity songsEntity){
         if(songsEntity.getNameSong()!=null){
             //מיוחד כדי שנוכל לעשות LIKE
             String nameSong=songsEntity.getNameSong();
-            nameSong=removingToAllString(nameSong,specialNumToSongName());
+            nameSong=removingToAllString(nameSong,specialNumToSongName);
             songsEntity.setNameSong(nameSong);
         }
         if(songsEntity.getZaner()!=null){
             String zaner=songsEntity.getZaner();
-            zaner=FunZaner(zaner,false,numToDB);
+            zaner=funZaner(zaner,false,numToDB);
             songsEntity.setZaner(zaner);
         }
     }
-    private static void FunSong(byte[]arr ,boolean status,int divisionNumber){
+
+     */
+    private static void funSong(byte[]arr ,boolean status,int divisionNumber){
         int a=arr[0];
         int b=arr[arr.length-1];
         int key=(arr[0]+arr[arr.length-1])/divisionNumber;
@@ -101,35 +103,35 @@ public class Security {
         if(status){
             System.out.println("key: " + key);
             System.out.println("a = " + a + " b = " + b);
-            adding(arr,key);
+            adding(arr,key,1,arr.length-1);
             rotateArrayByKey(arr,key,1,arr.length-2);
             return;
         }
         reverseRotateArrayByKey(arr,key,1,arr.length-2);
         removeAdding(arr,key);
     }
-    private static String FunName(String str ,boolean status,int  divisionNumber){
+    private static String funName(String str ,boolean status,int  divisionNumber){
         int key=(str.charAt(0)+str.charAt(str.length()-1))/divisionNumber;
         if(key==0){
             return str;
         }
         if(status){
-            str=adding(str,key);
+            str=adding(str,key,1,str.length()-1);
             return str;
         }
-        str =removeAdding(str,key);
+        str =removeAdding(str,key,1,str.length()-1);
         return str;
     }
-    private static String FunZaner(String str , boolean status, int divisionNumber){
+    private static String funZaner(String str , boolean status, int divisionNumber){
         int key=(str.charAt(0)+str.charAt(str.length()-1))/divisionNumber;
         if(key==0){
             return str;
         }
         if(status){
-            str=removeAdding(str,key);
+            str=removeAdding(str,key,1,str.length()-1);
             return str;
         }
-        str=adding(str,key);
+        str=adding(str,key,1,str.length()-1);
         return str;
     }
     private static void removeAdding(byte[]bytesArray,int key){
@@ -161,9 +163,9 @@ public class Security {
             arr[startIndex] = temp;
         }
     }
-    private static void adding(byte[]bytesArray,int key){
+    private static void adding(byte[]bytesArray,int key,int startIndex,int lastIndex){
         int j;
-        for (int i = 1; i < bytesArray.length-1;) {
+        for (int i = startIndex; i < lastIndex;) {
             for (j = 0; j <Math.abs(key) ; j++) {
                 if(i>= bytesArray.length-1){
                     break;
@@ -190,9 +192,9 @@ public class Security {
             arr[endIndex] = temp;
         }
     }
-    private static String adding(String str,int key){
+    private static String adding(String str,int key,int startIndex,int lastIndex){
         char[] charArray = str.toCharArray();
-        for (int i = 1; i < charArray.length-1;i++) {
+        for (int i = startIndex; i < lastIndex;i++) {
                 charArray[i]+=key;
             }
         return new String(charArray);
@@ -211,9 +213,9 @@ public class Security {
         }
         return new String(charArray);
     }
-    private static String removeAdding(String str,int key){
+    private static String removeAdding(String str,int key,int startIndex,int lastIndex){
         char[] charArray = str.toCharArray();
-        for (int i = 1; i < charArray.length-1;i++) {
+        for (int i = startIndex; i < lastIndex;i++) {
                 charArray[i]-=key;
         }
         return new String(charArray);

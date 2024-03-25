@@ -3,7 +3,6 @@ package com.example.music_fly_project.server;
 import com.example.music_fly_project.entity.AlbumsEntity;
 import com.example.music_fly_project.entity.SongsEntity;
 import com.example.music_fly_project.enums.ErrorsEnumForAlbums;
-import com.example.music_fly_project.enums.TypeFormat;
 import com.example.music_fly_project.logic.AlbumsLogic;
 import com.example.music_fly_project.logic.FtpLogic;
 import com.example.music_fly_project.logic.Security;
@@ -13,11 +12,6 @@ import com.example.music_fly_project.vo.SongsVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,24 +20,26 @@ import java.util.Optional;
 public class AlbumsServer {
     @Autowired
     private AlbumsRepository albumsRepository;
-    @Autowired
-    private SongsServer songsServer;
     private int limitAlbumsSearch=5;
     public AlbumsVO save(AlbumsVO albumsVO){
         AlbumsEntity bean =new AlbumsEntity();
-        AlbumsLogic.copyProperty(albumsVO,bean);
+        BeanUtils.copyProperties(albumsVO,bean);
         try {
             bean=albumsRepository.save(bean);
-            AlbumsLogic.copyProperty(bean,albumsVO);
+            BeanUtils.copyProperties(bean,albumsVO);
         }catch (Exception e){
             System.out.println(e);
             albumsVO.setE(ErrorsEnumForAlbums.NotSavedSuccessfully);
             return albumsVO;
         }
         albumsVO.setE(ErrorsEnumForAlbums.GOOD);
+        albumsVO.setImageAlbum(null);
+        albumsVO.setNameAlbum(null);
+        albumsVO.setLengthAlbum(-1);
+        albumsVO.setUserId(null);
         return albumsVO;
     }
-    public ErrorsEnumForAlbums delete(long id){
+    public ErrorsEnumForAlbums delete(Long id){
         Optional<AlbumsEntity> albums;
         albums=getById(id);
         if(!albums.isPresent()){
@@ -55,13 +51,13 @@ public class AlbumsServer {
                 FtpLogic.deleteFile((String) songsPath.get().get(i)[0],(Long)songsPath.get().get(i)[1],(Long)songsPath.get().get(i)[1]);
             }
         }
-        albumsRepository.DelAllConPlayList(id);
-        albumsRepository.DelAllSong(id);
-        albumsRepository.DelAllConAlbumSong(id);
+        albumsRepository.delAllConPlayList(id);
+        albumsRepository.delAllSong(id);
+        albumsRepository.delAllConAlbumSong(id);
         albumsRepository.deleteById(id);
         return ErrorsEnumForAlbums.GOOD;
     }
-    public ErrorsEnumForAlbums update(AlbumsVO albumsVO){
+    /*public ErrorsEnumForAlbums update(AlbumsVO albumsVO){
         Optional<AlbumsEntity> albums;
         albums=getById(albumsVO.getId());
         if(!albums.isPresent()){
@@ -72,7 +68,9 @@ public class AlbumsServer {
         albumsRepository.save(bean);
         return ErrorsEnumForAlbums.GOOD;
     }
-    private Optional<AlbumsEntity> getById(long id){
+
+     */
+    private Optional<AlbumsEntity> getById(Long id){
         return albumsRepository.findById(id);
     }
     public List<SongsVO> getSongsInAlbum(Long albumId){
@@ -83,11 +81,9 @@ public class AlbumsServer {
         }
         List<SongsVO> listId=new ArrayList<>();
         for (int i = 0; i < list.get().size(); i++) {
-            SongsEntity songsEntity=new SongsEntity();
-            BeanUtils.copyProperties(list.get().get(i),songsEntity);
-            Security.decipherFromDB(songsEntity);
             SongsVO songsVO=new SongsVO();
-            BeanUtils.copyProperties(songsEntity,songsVO);
+            BeanUtils.copyProperties(list.get().get(i),songsVO);
+            Security.decipherFromDB(songsVO);
             Security.encodeToClient(songsVO);
             listId.add(songsVO);
         }
@@ -95,7 +91,7 @@ public class AlbumsServer {
     }
     public List<AlbumsVO> getAlbumOfUser(Long userId){
         Optional<List<AlbumsEntity>> list;
-        list=albumsRepository.getAlbumOfUser(userId);
+        list=albumsRepository.getAlbumsOfUser(userId);
         if(!list.isPresent()){
             return null;
         }

@@ -14,7 +14,7 @@ public class FtpLogic {
     public static String getPath(){
         return pathToSaveSong;
     }
-    public static boolean uploadFile(long user, long pass,long songId, byte[] song,long nameFile) {
+    public static boolean uploadFile(Long user, Long pass,Long songId, byte[] song,Long nameFile) {
         FTPClient ftpClient = new FTPClient();
 
         try {
@@ -87,7 +87,7 @@ public class FtpLogic {
         }
         return ((ByteArrayOutputStream) outputStream).toByteArray();
     }
-    public static boolean deleteFile(String path,long user,long pass){
+    public static boolean deleteFile(String path,Long user,Long pass){
         FTPClient ftpClient = new FTPClient();
         try {
             ftpClient.connect(server, port);
@@ -123,7 +123,7 @@ public class FtpLogic {
         }
         return true;
     }
-    public static boolean createDirectory(long songId,long user,long pass){
+    public static boolean createDirectory(Long songId,Long user,Long pass){
         FTPClient ftpClient = new FTPClient();
         try {
             ftpClient.connect(server, port);
@@ -189,7 +189,7 @@ public class FtpLogic {
         }
         return -1;
     }
-    public static boolean deleteDirectory(long songId,long user,long pass){
+    /*public static boolean deleteDirectory(long songId,long user,long pass){
         FTPClient ftpClient = new FTPClient();
         try {
             ftpClient.connect(server, port);
@@ -225,4 +225,6 @@ public class FtpLogic {
         }
         return true;
     }
+
+     */
 }

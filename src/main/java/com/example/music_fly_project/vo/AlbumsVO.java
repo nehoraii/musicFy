@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class AlbumsVO {
     private Long id;
-    private long userId;
+    private Long userId;
     private String nameAlbum;
     private byte[] imageAlbum;
     private int lengthAlbum;

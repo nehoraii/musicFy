@@ -22,9 +22,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "albums")
-public class AlbumsEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class AlbumsEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -32,7 +30,7 @@ public class AlbumsEntity implements Serializable {
     private Long id;
     @Basic(optional = false)
     @Column(name = "user_id")
-    private long userId;
+    private Long userId;
     @Basic(optional = false)
     @Column(name = "name_album")
     private String nameAlbum;

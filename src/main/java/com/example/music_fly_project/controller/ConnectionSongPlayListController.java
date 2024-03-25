@@ -2,14 +2,11 @@ package com.example.music_fly_project.controller;
 
 import com.example.music_fly_project.enums.ErrorEnumForConSongPlayList;
 import com.example.music_fly_project.server.ConnectionSongPlayListServer;
-import com.example.music_fly_project.server.PlayListServer;
 import com.example.music_fly_project.vo.ConnectionSongPlayListVO;
-import com.example.music_fly_project.vo.PlayListVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Validated
 @RequestMapping("/ConSongPlayList")

@@ -21,9 +21,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "connection_song_album")
-public class ConnectionSongAlbumEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class ConnectionSongAlbumEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -31,9 +29,9 @@ public class ConnectionSongAlbumEntity implements Serializable {
     private Long id;
     @Basic(optional = false)
     @Column(name = "album_id")
-    private long albumId;
+    private Long albumId;
     @Basic(optional = false)
     @Column(name = "song_id")
-    private long songId;
+    private Long songId;
 
 }

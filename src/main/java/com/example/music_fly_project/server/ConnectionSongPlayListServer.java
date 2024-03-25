@@ -39,9 +39,9 @@ public class ConnectionSongPlayListServer {
         conSongPlayListRepository.deleteById(con.get().getId());
         return ErrorEnumForConSongPlayList.GOOD;
     }
-    public ErrorEnumForConSongPlayList delCon(long songId){
+    public ErrorEnumForConSongPlayList delCon(Long songId){
         try {
-            conSongPlayListRepository.DelConBySongId(songId);
+            conSongPlayListRepository.delConBySongId(songId);
             return ErrorEnumForConSongPlayList.GOOD;
         }catch (Exception e){
             System.out.println(e);

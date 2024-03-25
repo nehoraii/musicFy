@@ -23,8 +23,6 @@ public class ConnectionSongAlbumController {
     @Autowired
     private ConnectionSongAlbumServer connectionSongAlbumServer;
     @Autowired
-    private AlbumsServer albumsServer;
-    @Autowired
     private SongsServer songsServer;
     @PostMapping("/save")
     public ErrosEnumForConnectionSongAlbum save(@RequestBody ConnectionSongAlbumsVO conVO){
@@ -32,12 +30,13 @@ public class ConnectionSongAlbumController {
         e=connectionSongAlbumServer.save(conVO);
         return e;
     }
-    @PutMapping("/update")
+   /* @PutMapping("/update")
     public ErrosEnumForConnectionSongAlbum update(@RequestBody ConnectionSongAlbumsVO conVO){
         ErrosEnumForConnectionSongAlbum e;
         e=connectionSongAlbumServer.update(conVO);
         return e;
     }
+    */
     @DeleteMapping("/delete")
     public ErrosEnumForConnectionSongAlbum delete(@RequestBody ConnectionSongAlbumsVO conVO){
         ErrosEnumForConnectionSongAlbum e;
@@ -45,7 +44,7 @@ public class ConnectionSongAlbumController {
         songsServer.delete(conVO.getSongId());
         return e;
     }
-    @PostMapping("/getConnectionByAlbumId")
+   /* @PostMapping("/getConnectionByAlbumId")
     public List<ConnectionSongAlbumsVO> getAlbum(@RequestBody AlbumsVO albumsVO){
         List<ConnectionSongAlbumsVO> album;
         album=connectionSongAlbumServer.getConnectionByAlbum(albumsVO.getId());
@@ -57,4 +56,5 @@ public class ConnectionSongAlbumController {
         list=connectionSongAlbumServer.getConnectionBySongId(songsVO.getId());
         return list;
     }
+    */
 }

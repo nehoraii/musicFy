@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class ConnectionSongAlbumsVO {
     private Long id;
-    private long albumId;
-    private long songId;
+    private Long albumId;
+    private Long songId;
 }

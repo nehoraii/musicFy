@@ -36,17 +36,17 @@ public class PlayListServer {
         playListVO.setE(ErrorsEnumForPlayList.GOOD);
         return playListVO;
     }
-    public ErrorsEnumForPlayList delete(long id){
+    public ErrorsEnumForPlayList delete(Long id){
         Optional<PlayListEntity>playList;
         playList=geyById(id);
         if(!playList.isPresent()){
             return ErrorsEnumForPlayList.PLAY_LIST_NOT_FOUND;
         }
         playListRepository.deleteById(id);
-        playListRepository.DelAllConByPlayListId(id);
+        playListRepository.delAllConByPlayListId(id);
         return ErrorsEnumForPlayList.GOOD;
     }
-    public ErrorsEnumForPlayList update(PlayListVO playListVO){
+    private ErrorsEnumForPlayList update(PlayListVO playListVO){
         Optional<PlayListEntity> bean;
         try{
             bean=geyById(playListVO.getId());
@@ -61,7 +61,7 @@ public class PlayListServer {
             return ErrorsEnumForPlayList.ELSE_ERROR;
         }
     }
-    private  Optional<PlayListEntity> geyById(long id){
+    private  Optional<PlayListEntity> geyById(Long id){
         Optional<PlayListEntity> user=playListRepository.findById(id);
         return user;
     }
@@ -83,7 +83,7 @@ public class PlayListServer {
     }
     public List<PlayListVO> getPlayListByUserId(PlayListVO playListVO){
         Optional<List<PlayListEntity>>list;
-        list=playListRepository.getPlayListUserId(playListVO.getUserId());
+        list=playListRepository.getPlayListsByUserId(playListVO.getUserId());
         if(!list.isPresent()){
             return null;
         }
@@ -103,14 +103,14 @@ public class PlayListServer {
         return lengthPlayList;
     }
     public List<Long> getPlayListById(PlayListVO playListVO){
-        Optional<List<Object[]>> list;
-        list=playListRepository.getPlayListByPlayListId(playListVO.getId());
+        Optional<List<Object>> list;
+        list=playListRepository.getSongsIdByPlayListId(playListVO.getId());
         if(!list.isPresent()){
             return null;
         }
         List<Long> listId = new ArrayList<>();
         for (int i = 0; i < list.get().size(); i++) {
-            listId.add((Long)list.get().get(i)[0]);
+            listId.add((Long)list.get().get(i));
         }
         return listId;
     }
@@ -122,11 +122,9 @@ public class PlayListServer {
         }
         List<SongsVO> listVo = new ArrayList<>();
         for (int i = 0; i < list.get().size(); i++) {
-            SongsEntity songsEntity=new SongsEntity();
             SongsVO songsVO=new SongsVO();
-            BeanUtils.copyProperties(list.get().get(i),songsEntity);
-            Security.decipherFromDB(songsEntity);
-            BeanUtils.copyProperties(songsEntity,songsVO);
+            BeanUtils.copyProperties(list.get().get(i),songsVO);
+            Security.decipherFromDB(songsVO);
             Security.encodeToClient(songsVO);
             listVo.add(songsVO);
         }
@@ -143,26 +141,23 @@ public class PlayListServer {
             if(!albumsEntity.isPresent()){
                 return;
             }
+            PlayListVO playListVOToUpdate=new PlayListVO();
             if(albumsEntity.get().size()<4){
-                PlayListVO playListVOToUpdate=new PlayListVO();
                 playListVOToUpdate.setId(playListEntity.get().getId());
                 playListVOToUpdate.setPlayListName(playListEntity.get().getPlayListName());
                 playListVOToUpdate.setUserId(playListEntity.get().getUserId());
                 playListVOToUpdate.setPublic1(playListEntity.get().isPublic1());
                 playListVOToUpdate.setDate(playListEntity.get().getDate());
-                //playListVOToUpdate.setLengthPlayList(playListEntity.get().getLengthPlayList());
                 byte[] image=(byte[]) albumsEntity.get().get(0);
                 playListVOToUpdate.setImage(image);
                 update(playListVOToUpdate);
                 return ;
             }
-            PlayListVO playListVOToUpdate=new PlayListVO();
             playListVOToUpdate.setId(playListEntity.get().getId());
             playListVOToUpdate.setPlayListName(playListEntity.get().getPlayListName());
             playListVOToUpdate.setUserId(playListEntity.get().getUserId());
             playListVOToUpdate.setPublic1(playListEntity.get().isPublic1());
             playListVOToUpdate.setDate(playListEntity.get().getDate());
-            //playListVOToUpdate.setLengthPlayList(playListEntity.get().getLengthPlayList());
             byte[]image=combineImages((byte[]) albumsEntity.get().get(0),(byte[]) albumsEntity.get().get(1),(byte[]) albumsEntity.get().get(2),(byte[]) albumsEntity.get().get(3));
             playListVOToUpdate.setImage(image);
             update(playListVOToUpdate);

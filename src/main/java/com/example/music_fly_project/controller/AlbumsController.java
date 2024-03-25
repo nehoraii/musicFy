@@ -6,7 +6,6 @@ import com.example.music_fly_project.vo.AlbumsVO;
 import com.example.music_fly_project.vo.SongsVO;
 import com.example.music_fly_project.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,26 +18,31 @@ import java.util.List;
 public class AlbumsController {
     @Autowired
     private  AlbumsServer albumsServer;
-    @PostMapping(value = "/save",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/save")
     public AlbumsVO save(@RequestBody AlbumsVO albumsVO){
-        return albumsServer.save(albumsVO);
+        AlbumsVO albumsVORet;
+        albumsVORet= albumsServer.save(albumsVO);
+        return albumsVORet;
     }
     @DeleteMapping("/delete")
     public ErrorsEnumForAlbums delete(@RequestBody AlbumsVO albumsVO){
-        return albumsServer.delete(albumsVO.getId());
+        ErrorsEnumForAlbums e;
+        e=albumsServer.delete(albumsVO.getId());
+        return e;
     }
-    @PutMapping("/update")
+    /*@PutMapping("/update")
     public ErrorsEnumForAlbums update(@RequestBody AlbumsVO albumsVO){
         return albumsServer.update(albumsVO);
     }
+     */
     @PostMapping("/getSongsInAlbum")
     public List<SongsVO> getSongsInAlbum(@RequestBody AlbumsVO albumsVO){
         List<SongsVO>list;
         list=albumsServer.getSongsInAlbum(albumsVO.getId());
         return list;
     }
-    @PostMapping("/getAlbumOfUser")
-    public List<AlbumsVO> getAlbumOfUser(@RequestBody UserVO userVO){
+    @PostMapping("/getAlbumsOfUser")
+    public List<AlbumsVO> getAlbumsOfUser(@RequestBody UserVO userVO){
         List<AlbumsVO>list;
         list=albumsServer.getAlbumOfUser(userVO.getId());
         return list;

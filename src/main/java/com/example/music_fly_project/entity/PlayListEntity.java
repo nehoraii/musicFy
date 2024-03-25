@@ -24,12 +24,8 @@ import lombok.Data;
 @Entity
 @Table(name = "play_list",schema = "public")
 @Data
-public class PlayListEntity implements Serializable {
+public class PlayListEntity{
 
-    @Column(name = "image",columnDefinition="bytea")
-    private byte[] image;
-
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -37,7 +33,7 @@ public class PlayListEntity implements Serializable {
     private Long id;
     @Basic(optional = false)
     @Column(name = "user_id")
-    private long userId;
+    private Long userId;
     @Basic(optional = false)
     @Column(name = "play_list_name")
     private String playListName;
@@ -48,6 +44,8 @@ public class PlayListEntity implements Serializable {
     @Basic(optional = false)
     @Column(name = "public")
     private boolean public1;
+    @Column(name = "image",columnDefinition="bytea")
+    private byte[] image;
 
 
 }
