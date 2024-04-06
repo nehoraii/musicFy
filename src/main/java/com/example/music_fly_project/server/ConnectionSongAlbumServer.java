@@ -25,7 +25,7 @@ public class ConnectionSongAlbumServer {
         }
         return ErrosEnumForConnectionSongAlbum.GOOD;
     }
-    public ErrosEnumForConnectionSongAlbum delete(Long id){
+    /*public ErrosEnumForConnectionSongAlbum delete(Long id){
         Optional<ConnectionSongAlbumEntity> con;
         con=getById(id);
         if(!con.isPresent()){
@@ -34,6 +34,7 @@ public class ConnectionSongAlbumServer {
         connectionSongAlbumRepository.deleteById(id);
         return ErrosEnumForConnectionSongAlbum.GOOD;
     }
+     */
     /*public ErrosEnumForConnectionSongAlbum update(ConnectionSongAlbumsVO conVO){
         Optional<ConnectionSongAlbumEntity> con;
         con=getById(conVO.getId());
@@ -49,9 +50,12 @@ public class ConnectionSongAlbumServer {
         return ErrosEnumForConnectionSongAlbum.GOOD;
     }
      */
-    private Optional<ConnectionSongAlbumEntity> getById(Long id){
-        return connectionSongAlbumRepository.findById(id);
+    /*private Optional<ConnectionSongAlbumEntity> getById(Long id){
+        Optional<ConnectionSongAlbumEntity> connectionSongAlbumEntity;
+        connectionSongAlbumEntity = connectionSongAlbumRepository.findById(id);
+        return connectionSongAlbumEntity;
     }
+     */
     /*public List<ConnectionSongAlbumsVO> getConnectionByAlbum(long id){
         Optional<List<ConnectionSongAlbumEntity>>list;
         list=connectionSongAlbumRepository.getSongForAlbum(id);

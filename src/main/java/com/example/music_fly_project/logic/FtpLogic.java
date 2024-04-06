@@ -123,6 +123,42 @@ public class FtpLogic {
         }
         return true;
     }
+    public static boolean createDirectory(Long user,Long pass){
+        FTPClient ftpClient = new FTPClient();
+        try {
+            ftpClient.connect(server, port);
+            boolean sec=ftpClient.login(Long.toString(user),Long.toString(pass));
+            if(sec==false){
+                return false;
+            }
+            ftpClient.enterLocalPassiveMode();
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+
+            // יצירת OutputStream עבור הקובץ המקומי שבו נשמור את הקובץ המורד
+            // בקשה להוריד את הקובץ מהשרת
+            System.out.println("Start create dir from server");
+            boolean success = ftpClient.makeDirectory(getPath()+"\\"+Long.toString(user));
+            if (success) {
+                System.out.println("The create dir successfully.");
+
+            } else {
+                System.out.println("Failed create dir.");
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ftpClient.isConnected()) {
+                    ftpClient.logout();
+                    ftpClient.disconnect();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return true;
+    }//for user
     public static boolean createDirectory(Long songId,Long user,Long pass){
         FTPClient ftpClient = new FTPClient();
         try {
@@ -158,7 +194,7 @@ public class FtpLogic {
             }
         }
         return true;
-    }
+    }//for song
     public static int getAmountOfFiles(String path){
         FTPClient ftpClient = new FTPClient();
         try {

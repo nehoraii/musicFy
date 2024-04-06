@@ -1,19 +1,13 @@
 package com.example.music_fly_project.controller;
 
-import com.example.music_fly_project.enums.ErrorsEnumForAlbums;
 import com.example.music_fly_project.enums.ErrosEnumForConnectionSongAlbum;
-import com.example.music_fly_project.server.AlbumsServer;
 import com.example.music_fly_project.server.ConnectionSongAlbumServer;
 import com.example.music_fly_project.server.SongsServer;
-import com.example.music_fly_project.vo.AlbumsVO;
 import com.example.music_fly_project.vo.ConnectionSongAlbumsVO;
-import com.example.music_fly_project.vo.SongsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Objects;
 
 @Validated
 @RestController

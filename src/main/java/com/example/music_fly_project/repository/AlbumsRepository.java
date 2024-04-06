@@ -16,6 +16,8 @@ public interface AlbumsRepository extends JpaRepository<AlbumsEntity,Long> {
     Optional<List<SongsEntity>> getAlbumsSongByAlbumId(@Param("albumId")Long albumId);
     @Query("SELECT a FROM AlbumsEntity a WHERE a.userId=:userId")
     Optional<List<AlbumsEntity>> getAlbumsOfUser(@Param("userId") Long userId);
+    @Query(value = "SELECT * FROM albums WHERE user_id=:userId LIMIT 1",nativeQuery = true)
+    Optional<AlbumsEntity> getAlbumByUserIdLIMIT(@Param("userId")Long userId);
     @Query("SELECT s.id FROM SongsEntity s JOIN ConnectionSongAlbumEntity e ON s.id=e.songId WHERE e.albumId=:albumId")
     Optional<List<Object>> getAlbumsSongIdByAlbumId(@Param("albumId")Long albumId);
     @Query(value = "SELECT * FROM albums WHERE name_album LIKE %:name% AND id > :lastIdAlbum LIMIT :lim",nativeQuery = true)

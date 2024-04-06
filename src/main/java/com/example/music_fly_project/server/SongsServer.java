@@ -27,14 +27,14 @@ public class SongsServer {
         Security.decipherFromClient(songsVO);
         if(songsVO.getId()==-1){
             long songId=saveToDB(songsVO);
+            songsVO.setId(songId);
             boolean sec;
+            ErrorsEnumForSongs e=ErrorsEnumForSongs.GOOD;
             sec=FtpLogic.createDirectory(songId,songsVO.getUserId(),songsVO.getUserId());
             if(sec){
                 String path=FtpLogic.getPath()+"\\"+songsVO.getUserId()+"\\"+songId;
-                songsVO.setSongPath(path);
+                e=update(songsVO,path);
             }
-            songsVO.setId(songId);
-            ErrorsEnumForSongs e=update(songsVO);
             songsVO.setE(e);
         }
         boolean ans=saveFtp(songsVO,songsVO.getChunkNum());
@@ -44,7 +44,6 @@ public class SongsServer {
         songsVO.setNameSong(null);
         songsVO.setDate(null);
         songsVO.setZaner(null);
-        songsVO.setSongPath(null);
         songsVO.setUserId(null);
         //הקליינט לא צריך את הנתונים הנ"ל בעת הוספת שיר למערכת
         return songsVO;
@@ -63,6 +62,7 @@ public class SongsServer {
         Security.decipherFromDB(songsVO);
         return sec;
     }
+
     public ErrorsEnumForSongs delete(Long id){
         Optional<SongsEntity> songE=geyById(id);
         if(!songE.isPresent()){
@@ -75,12 +75,13 @@ public class SongsServer {
         songsRepository.deleteById(id);
         return ErrorsEnumForSongs.GOOD;
     }
-    public ErrorsEnumForSongs update(SongsVO songsVO) {
+    private ErrorsEnumForSongs update(SongsVO songsVO,String path) {
         Optional<SongsEntity> songE=geyById(songsVO.getId());
         if(!songE.isPresent()){
             return ErrorsEnumForSongs.SONG_NOT_FOUND;
         }
         SongsEntity bean= new SongsEntity();
+        bean.setSongPath(path);
         Security.encodeToDB(songsVO);
         BeanUtils.copyProperties(songsVO,bean);
         songsRepository.save(bean);
@@ -115,7 +116,6 @@ public class SongsServer {
         int amountOfFiles=FtpLogic.getAmountOfFiles(songsEntity.getSongPath());
         songsVO.setAmountOfChunks(amountOfFiles);
         Security.encodeToClient(songsVO);
-        songsVO.setSongPath(null);
         return songsVO;
     }
     public SongsVO getChunkId(SongsVO songsVO) {
@@ -147,7 +147,6 @@ public class SongsServer {
         for (int i = 0; i < listVo.size(); i++) {
             Security.decipherFromDB(listVo.get(i));
             Security.encodeToClient(listVo.get(i));
-            listVo.get(i).setSongPath(null);
         }
         return listVo;
     }

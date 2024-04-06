@@ -18,7 +18,9 @@ public class PlayListController {
     private PlayListServer playListServer;
     @PostMapping("/save")
     public PlayListVO save(@RequestBody PlayListVO playListVO){
-        return playListServer.save(playListVO);
+        PlayListVO playListRet;
+        playListRet=playListServer.save(playListVO);
+        return playListRet;
     }
     @DeleteMapping("/delete")
     public ErrorsEnumForPlayList delete(@RequestBody PlayListVO playListVO){

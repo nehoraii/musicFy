@@ -15,4 +15,5 @@ public interface SongsRepository extends JpaRepository<SongsEntity,Long> {
     @Query("SELECT e from AlbumsEntity e JOIN ConnectionSongAlbumEntity c ON c.albumId=e.id WHERE c.songId=:songId")
     Optional<AlbumsEntity> getAlbumBySongId(@Param("songId") Long songId);
 
+
 }

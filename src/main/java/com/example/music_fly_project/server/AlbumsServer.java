@@ -22,6 +22,7 @@ public class AlbumsServer {
     private AlbumsRepository albumsRepository;
     private int limitAlbumsSearch=5;
     public AlbumsVO save(AlbumsVO albumsVO){
+        thereIsDirectory(albumsVO.getUserId());
         AlbumsEntity bean =new AlbumsEntity();
         BeanUtils.copyProperties(albumsVO,bean);
         try {
@@ -29,7 +30,7 @@ public class AlbumsServer {
             BeanUtils.copyProperties(bean,albumsVO);
         }catch (Exception e){
             System.out.println(e);
-            albumsVO.setE(ErrorsEnumForAlbums.NotSavedSuccessfully);
+            albumsVO.setE(ErrorsEnumForAlbums.NOT_SAVED_SUCCESSFULLY);
             return albumsVO;
         }
         albumsVO.setE(ErrorsEnumForAlbums.GOOD);
@@ -39,11 +40,19 @@ public class AlbumsServer {
         albumsVO.setUserId(null);
         return albumsVO;
     }
+    private void thereIsDirectory(Long userId){
+        //בדיקה אם יש למשתמש לפחות שיר אחד אם יש לו לפחות שיר אחד זה אומר שיש לו תיקייה ושלא צריך ליצור לו תיקייה אם אין לו זה אומר שצריך ליצור לו תיקייה
+        //מעדיף לבצע שאילתה עבור כל אלבום מאשר שסתם יהיה לכל משתמש תיקייה
+        Optional<AlbumsEntity>s=albumsRepository.getAlbumByUserIdLIMIT(userId);
+        if(s.isPresent()==false){
+            FtpLogic.createDirectory(userId,userId);
+        }
+    }
     public ErrorsEnumForAlbums delete(Long id){
         Optional<AlbumsEntity> albums;
         albums=getById(id);
         if(!albums.isPresent()){
-            return ErrorsEnumForAlbums.AlbumsNotFound;
+            return ErrorsEnumForAlbums.ALBUMS_NOT_FOUND;
         }
         Optional<List<Object[]>> songsPath=albumsRepository.getSongsPath(id);
         if(songsPath.isPresent()){
@@ -71,7 +80,9 @@ public class AlbumsServer {
 
      */
     private Optional<AlbumsEntity> getById(Long id){
-        return albumsRepository.findById(id);
+        Optional<AlbumsEntity> albumsEntity;
+        albumsEntity=albumsRepository.findById(id);
+        return albumsEntity;
     }
     public List<SongsVO> getSongsInAlbum(Long albumId){
         Optional<List<SongsEntity>> list;
