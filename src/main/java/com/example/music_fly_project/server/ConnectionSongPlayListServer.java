@@ -13,8 +13,15 @@ import java.util.Optional;
 @Service
 public class ConnectionSongPlayListServer {
     @Autowired
-    private ConnectionSongPlayListRepository conSongPlayListRepository;
+    private ConnectionSongPlayListRepository conSongPlayListRepository;//אובייקט הכלה מסוג ConnectionSongPlayListRepository.
 
+
+
+    /*
+    מקבלת: אובייקט המייצג חיבור בין שיר לפלייליסט.
+    מבצעת: שומרת את האובייקט במסד הנתונים.
+    מחזירה: מחזירה האם הצליחה לשמור את האובייקט בהצלחה במידה ולא מחזירה את סיבת הבעיה.
+    */
     public ErrorEnumForConSongPlayList save(ConnectionSongPlayListVO conSongPlayList){
         ConnectionSongPlayListEntity bean=new ConnectionSongPlayListEntity();
         try {
@@ -29,6 +36,13 @@ public class ConnectionSongPlayListServer {
         }
         return ErrorEnumForConSongPlayList.GOOD;
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג חיבור בין שיר לפלייליסט.
+    מבצעת: מוחקת את הקשר.
+    מחזירה: מחזירה האם הצליחה למחוק את האובייקט בהצלחה במידה ולא מחזירה את סיבת הבעיה.
+    */
     public ErrorEnumForConSongPlayList delete(ConnectionSongPlayListVO conSongPlayList){
         Optional<ConnectionSongPlayListEntity> con;
         con=conSongPlayListRepository.getConBySongIdAndPlayListId(conSongPlayList.getSongId(),conSongPlayList.getPlayListId());
@@ -38,6 +52,13 @@ public class ConnectionSongPlayListServer {
         conSongPlayListRepository.deleteById(con.get().getId());
         return ErrorEnumForConSongPlayList.GOOD;
     }
+
+
+    /*
+    מקבלת: המזהה הייחודי של השיר.
+    מבצעת: מוחקת את הקשרים שהשיר מופיע.
+    מחזירה: מחזירה האם הצליחה למחוק את הקשרים בהצלחה במידה ולא מחזירה את סיבת הבעיה.
+    */
     public ErrorEnumForConSongPlayList delCon(Long songId){
         try {
             conSongPlayListRepository.delConBySongId(songId);

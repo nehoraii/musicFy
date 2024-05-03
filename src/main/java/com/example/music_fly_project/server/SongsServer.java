@@ -17,12 +17,20 @@ import java.util.Optional;
 @Service
 public class SongsServer {
     @Autowired
-    private SongsRepository songsRepository;
+    private SongsRepository songsRepository;//אובייקט הכלה מסוג SongsRepository.
     @Autowired
-    private ConnectionSongAlbumServer connectionSongAlbumServer;
+    private ConnectionSongAlbumServer connectionSongAlbumServer;//אובייקט הכלה מסוג ConnectionSongAlbumServer.
     @Autowired
-    private ConnectionSongPlayListServer connectionSongPlayListServer;
-    private int limitToSearch=5;
+    private ConnectionSongPlayListServer connectionSongPlayListServer;//אובייקט הכלה מסוג ConnectionSongPlayListServer.
+    private int limitToSearch=5;//מספר השירים שיופיעו בעת חיפוש.
+
+
+
+    /*
+    מקבלת: אובייקט המייצג שיר.
+    מבצעת: שמירת השיר במסד הנתונים ופתיחת תיקייה בשבילו במסד בשרת ה-FTP ושמירת הצ'אנק הראשון.
+    מחזירה: אובייקט המייצג שיר ובתוכו את השדות הרלוונטיים למשתמש.
+    */
     public SongsVO save(SongsVO songsVO) {
         Security.decipherFromClient(songsVO);
         if(songsVO.getId()==-1){
@@ -48,6 +56,13 @@ public class SongsServer {
         //הקליינט לא צריך את הנתונים הנ"ל בעת הוספת שיר למערכת
         return songsVO;
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג שיר.
+    מבצעת: שמירת האובייקט במסד המידע.
+    מחזירה: המזהה הייחודי של השיר החדש.
+    */
     private Long saveToDB(SongsVO songsVO){
         Security.encodeToDB(songsVO);
         SongsEntity songsEntity=new SongsEntity();
@@ -56,6 +71,13 @@ public class SongsServer {
         Security.decipherFromDB(songsVO);
         return songsEntity.getId();
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג שיר, את מספר הצ'אנק.
+    מבצעת: שמירת הצ'אנק בשרת ה-FTP
+    מחזירה: האם הצליחה לשמור או לא.
+    */
     private boolean saveFtp(SongsVO songsVO,int chuckId) {
         Security.encodeToDB(songsVO);
         boolean sec=FtpLogic.uploadFile(songsVO.getUserId(),songsVO.getUserId(),songsVO.getId(),songsVO.getTheSong(), Long.valueOf(chuckId));
@@ -63,6 +85,12 @@ public class SongsServer {
         return sec;
     }
 
+
+    /*
+    מקבלת: המזהה הייחודי של השיר.
+    מבצעת: מחיקת השיר ממסד הנתונים ומהשרת FTP.
+    מחזירה: האם הצליחה למחוק בהצלחה במידה ולא מחזירה את סיבת הבעיה.
+    */
     public ErrorsEnumForSongs delete(Long id){
         Optional<SongsEntity> songE=geyById(id);
         if(!songE.isPresent()){
@@ -75,6 +103,13 @@ public class SongsServer {
         songsRepository.deleteById(id);
         return ErrorsEnumForSongs.GOOD;
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג שיר, ונתיב חדש בשרת ה-FTP לשיר.
+    מבצעת: עדכון השיר במסד הנתונים והוספת הנתיב.
+    מחזירה: האם הצליחה לעדכן במידה ולא מחזירה את סיבת הבעיה.
+    */
     private ErrorsEnumForSongs update(SongsVO songsVO,String path) {
         Optional<SongsEntity> songE=geyById(songsVO.getId());
         if(!songE.isPresent()){
@@ -88,10 +123,25 @@ public class SongsServer {
         Security.decipherFromDB(songsVO);
         return ErrorsEnumForSongs.GOOD;
     }
+
+
+
+    /*
+    מקבלת: המזהה הייחודי לש השיר.
+    מבצעת: מביאה את המידע ממסד הנתונים.
+    מחזירה: מחזירה אובייקט המייצג את השיר.
+    */
     private Optional<SongsEntity> geyById(Long id){
         Optional<SongsEntity> user=songsRepository.findById(id);
         return user;
     }
+
+
+    /*
+    מקבלת: המזהה הייחודי של השיר.
+    מבצעת: מביאה אובייקט המייצג מידע על השיר.
+    מחזירה: מחזירה את האובייקט.
+    */
     private SongsEntity getSongById(Long songId){
         SongsEntity song;
         song =songsRepository.getReferenceById(songId);
@@ -109,6 +159,13 @@ public class SongsServer {
         return songsVO;
     }
     */
+
+
+    /*
+    מקבלת: אובייקט המייצג שיר.
+    מבצעת: מביאה את המידע על השיר.
+    מחזירה: מחזירה אובייקט המייצג את השיר ובתוכו את המידע הרלוונטי למשתמש.
+    */
     public SongsVO getSongProperty(SongsVO songsVO) {
         SongsEntity songsEntity = getSongById(songsVO.getId());
         BeanUtils.copyProperties(songsEntity,songsVO);
@@ -118,6 +175,13 @@ public class SongsServer {
         Security.encodeToClient(songsVO);
         return songsVO;
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג שיר.
+    מבצעת: מביאה את הצ'אנק המתאים לשיר המתאים.
+    מחזירה: אוביקט המייצג שיר ובתוכו המידע הרלוונטי לקליינט.
+    */
     public SongsVO getChunkId(SongsVO songsVO) {
         SongsEntity s = getSongById(songsVO.getId());
         byte arr[];
@@ -127,6 +191,13 @@ public class SongsServer {
         Security.encodeToClient(songsVO);
         return songsVO;
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג שיר.
+    מבצעת: מביאה את השירים מהמסד מידע שיש להם ששווים /דומים בשם.
+   מחזירה: מחזירה רשימה של אובייקטים המייצגים שיר.
+    */
     public List<SongsVO> getSongByName(SongsVO songsVO){
         Optional<List<SongsEntity>> songsEntity;
         try {
@@ -150,6 +221,13 @@ public class SongsServer {
         }
         return listVo;
     }
+
+
+    /*
+    מקבלת: המזהה הייחודי של השיר.
+    מבצעת: מביאה את ממסד הנתונים את התמונה של האלבום שממנו נלקח השיר.
+    מחזירה: מערך של בייתים המייצג את התמונה.
+    */
     public byte[] getImageSong(Long songId){
         Optional<AlbumsEntity> albums;
         albums=songsRepository.getAlbumBySongId(songId);

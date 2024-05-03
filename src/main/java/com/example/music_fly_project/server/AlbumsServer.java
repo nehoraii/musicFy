@@ -19,8 +19,15 @@ import java.util.Optional;
 @Service
 public class AlbumsServer {
     @Autowired
-    private AlbumsRepository albumsRepository;
-    private int limitAlbumsSearch=5;
+    private AlbumsRepository albumsRepository;//אובייקט הכלה מסוג AlbumsRepository.
+    private int limitAlbumsSearch=5;//כמות האובייקטים שתוחזר בחיפוש אלבום על פי שם.
+
+
+    /*
+    מקבלת: אובייקט מסוג AlbumsVO.
+    מבצעת: שומרת את הנתונים של האלבום במסד הנתונים.
+    מחזירה: אובייקט של האלבום ובתוכו את השדות הרלוונטיים למשתמש.
+    */
     public AlbumsVO save(AlbumsVO albumsVO){
         thereIsDirectory(albumsVO.getUserId());
         AlbumsEntity bean =new AlbumsEntity();
@@ -40,6 +47,13 @@ public class AlbumsServer {
         albumsVO.setUserId(null);
         return albumsVO;
     }
+
+
+    /*
+    מקבלת: המזהה הייחודי של המשתמש.
+    מבצעת: בודקת האם יש לו תיקייה בשרת ה-FTP במידה ולא מייצרת לו תיקייה.
+    מחזירה: כלום.
+    */
     private void thereIsDirectory(Long userId){
         //בדיקה אם יש למשתמש לפחות שיר אחד אם יש לו לפחות שיר אחד זה אומר שיש לו תיקייה ושלא צריך ליצור לו תיקייה אם אין לו זה אומר שצריך ליצור לו תיקייה
         //מעדיף לבצע שאילתה עבור כל אלבום מאשר שסתם יהיה לכל משתמש תיקייה
@@ -48,6 +62,13 @@ public class AlbumsServer {
             FtpLogic.createDirectory(userId,userId);
         }
     }
+
+
+    /*
+    מקבלת: המזהה הייחודי של האלבום.
+מבצעת: מוחקת את האובייקט מהטבלה.
+מחזירה: האם הצליחה למחוק בהצלחה במידה ולא את סיבת הבעיה.
+    */
     public ErrorsEnumForAlbums delete(Long id){
         Optional<AlbumsEntity> albums;
         albums=getById(id);
@@ -79,11 +100,26 @@ public class AlbumsServer {
     }
 
      */
+
+
+    /*
+    מקבלת: המזהה הייחודי של האלבום.
+    מבצעת: מביאה אובייקט המייצג את האלבום ממסד הנתונים.
+    מחזירה: מחזירה את האובייקט.
+    */
     private Optional<AlbumsEntity> getById(Long id){
         Optional<AlbumsEntity> albumsEntity;
         albumsEntity=albumsRepository.findById(id);
         return albumsEntity;
     }
+
+
+
+    /*
+    מקבלת: המזהה הייחודי של האלבום.
+    מבצעת: מביאה את רשימת השירים אשר נמצאים באלבום.
+   מחזירה: מחזירה רשימה של אובייקטים המייצגים שיר.
+    */
     public List<SongsVO> getSongsInAlbum(Long albumId){
         Optional<List<SongsEntity>> list;
         list=albumsRepository.getAlbumsSongByAlbumId(albumId);
@@ -100,6 +136,13 @@ public class AlbumsServer {
         }
         return listId;
     }
+
+
+    /*
+    מקבלת: המזהה הייחודי של המשתמש.
+    מבצעת: מביאה את כל האלבומים של המשתמש.
+    מחזירה: מחזירה את רשימה של אובייקטים המייצגים אלבום.
+    */
     public List<AlbumsVO> getAlbumOfUser(Long userId){
         Optional<List<AlbumsEntity>> list;
         list=albumsRepository.getAlbumsOfUser(userId);
@@ -117,11 +160,25 @@ public class AlbumsServer {
         }
         return listVo;
     }
+
+
+    /*
+    מקבלת: המזהה הייחודי של האלבום.
+מבצעת: בודקת כמה שירים יש באלבום.
+    מחזירה: מחזירה את כמות השירים שנמצאת באלבום.
+    */
     private int getLengthAlbum(Long albumId){
         int lengthAlbum;
         lengthAlbum=albumsRepository.getLengthAlbum(albumId);
         return lengthAlbum;
     }
+
+
+    /*
+    מקבלת: המזהה הייחודי של האלבום.
+    מבצעת: מביאה אובייקט המייצג את האלבום ממסד הנתונים.
+    מחזירה: מחזירה את האובייקט.
+    */
     public AlbumsVO getAlbumById(Long albumId){
         Optional<AlbumsEntity> albumEntity;
         albumEntity=getById(albumId);
@@ -132,6 +189,13 @@ public class AlbumsServer {
         AlbumsLogic.copyProperty(albumEntity.get(),albumsVO);
         return albumsVO;
     }
+
+
+    /*
+    מקבלת: המזהה הייחודי של האלבום.
+    מבצעת: מביאה את המזהים הייחודים של השירים אשר נמצאים באלבום.
+    מחזירה: רשימה של המזהים.
+    */
     public List<Long> getSongsIdByAlbumId(Long albumId){
         Optional<List<Object>> list;
         list=albumsRepository.getAlbumsSongIdByAlbumId(albumId);
@@ -146,6 +210,13 @@ public class AlbumsServer {
         }
         return listId;
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג אלבום.
+    מבצעת: מביאה את רשימת האלבומים שיש להם שם דומה או שווה לשם שקיבלנו באובייקט.
+    מחזירה: מחזירה רשימה של אובייקטים המייצגים אלבום.
+    */
     public List<AlbumsVO> getAlbumsByName(AlbumsVO albumsVO){
         Optional<List<AlbumsEntity>>listEntity;
         listEntity=albumsRepository.getAlbumsByName(albumsVO.getNameAlbum(), albumsVO.getId(), limitAlbumsSearch);

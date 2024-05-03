@@ -1,5 +1,5 @@
 package com.example.music_fly_project.enums;
-
+//מתאר מצב שיכול להיות בעת קוראים לפונקציה
 public enum ErrosEnumForConnectionSongAlbum {
     GOOD,
     CONNECTION_NOT_FOUND,

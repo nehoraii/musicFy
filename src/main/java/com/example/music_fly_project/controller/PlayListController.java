@@ -13,15 +13,30 @@ import java.util.List;
 @RestController
 @RequestMapping("/PlayList")
 @CrossOrigin(origins = "*")
+//מחלקה האחרית לניתוב בקשות הקליינט על ידי ה-URL שאיתו מגיעה ושלחת את בקשתו לפונקציה המתאימה
 public class PlayListController {
     @Autowired
-    private PlayListServer playListServer;
+    private PlayListServer playListServer;//אובייקט הכלה של playListServer.
+
+
+    /*
+    מקבלת: אובייקט המייצג פלייליסט.
+    מבצעת: קוראת לפונקציה המתאימה ב-server ושולחת לו את האובייקט.
+    מחזירה: את האובייקט ובתוכו שדה שמכיל האם הצליחה לשמור את הפלייליסט בהצלחה במידה ולא מחזירה את סיבת הבעיה.
+    */
     @PostMapping("/save")
     public PlayListVO save(@RequestBody PlayListVO playListVO){
         PlayListVO playListRet;
         playListRet=playListServer.save(playListVO);
         return playListRet;
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג פלייליסט.
+    מבצעת: קוראת לפונקציה המתאימה ב-server ושולחת לו את האובייקט.
+    מחזירה: האם הצליחה למחוק את הפלייליסט בהצלחה במידה ולא מחזירה את סיבת הבעיה.
+    */
     @DeleteMapping("/delete")
     public ErrorsEnumForPlayList delete(@RequestBody PlayListVO playListVO){
         ErrorsEnumForPlayList e;
@@ -36,28 +51,63 @@ public class PlayListController {
     }
 
      */
+
+
+    /*
+    מקבלת: אובייקט המייצג פלייליסט.
+    מבצעת: קוראת לפונקציה המתאימה ב-server ושולחת לו את האובייקט.
+    מחזירה: רשימה של אובייקטים המייצגים פלייליסט.
+    */
     @PostMapping("getPlayListByName")
     public List<PlayListVO> getPlayListByName(@RequestBody PlayListVO playListVO){
         List<PlayListVO> list;
         list=playListServer.getPlayListByName(playListVO);
         return list;
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג פלייליסט.
+    מבצעת: קוראת לפונקציה המתאימה ב-server ושולחת לו את האובייקט.
+    מחזירה: רשימה של אובייקטים המייצגים פלייליסט.
+    */
     @PostMapping("/getPlayListByUserId")
     public List<PlayListVO> getPlayListByUserId(@RequestBody PlayListVO playListVO) {
         List<PlayListVO>list;
         list=playListServer.getPlayListByUserId(playListVO);
         return list;
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג פלייליסט.
+    מבצעת: קוראת לפונקציה המתאימה ב-server ושולחת לו את האובייקט.
+    מחזירה: כלום.
+    */
     @PostMapping("/changeImage")
     public void changeImage(@RequestBody PlayListVO playListVO){
         playListServer.changeImagePlayList(playListVO.getId());
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג פלייליסט.
+    מבצעת: קוראת לפונקציה המתאימה ב-server ושולחת לו את האובייקט.
+    מחזירה: רשימה של המזהים הייחודים של שירים.
+    */
     @PostMapping("/getPlayListByPlayListId")
     public List<Long> getSongsIdByPlayListId(@RequestBody PlayListVO playListVO){
         List<Long>listId;
         listId=playListServer.getPlayListById(playListVO);
         return listId;
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג פלייליסט.
+    מבצעת: קוראת לפונקציה המתאימה ב-server ושולחת לו את האובייקט.
+    מחזירה: רשימה של אובייקטים המייצגים שירים.
+    */
     @PostMapping("/getInfoPlayList")
     public List<SongsVO> getInfo(@RequestBody PlayListVO playListVO){
         List<SongsVO> listVo;

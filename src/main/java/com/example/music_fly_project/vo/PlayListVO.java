@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.util.Date;
 @Data
+//אובייקט המייצג פלייליסט לקליינט על פי הנתונים הרלוונטים שהוגדרו מראש
 public class PlayListVO {
     private Long id;
     private Long userId;

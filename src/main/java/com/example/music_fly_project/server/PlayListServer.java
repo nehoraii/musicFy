@@ -25,8 +25,15 @@ import java.util.Optional;
 @Service
 public class PlayListServer {
     @Autowired
-    private PlayListRepository playListRepository;
-    private int limitPlayListSearch=5;
+    private PlayListRepository playListRepository;//אובייקט הכלה מסוג PlayListRepository.
+    private int limitPlayListSearch=5;//אורך האובייקטים שיחוזרו בעת החיפוש.
+
+
+    /*
+    מקבלת: אובייקט המייצג פלייליסט.
+    מבצעת: שומרת את האובייקט במסד הנתונים.
+    מחזירה: את האובייקט ובתוכו את השדות הרלוונטיים למשתמש.
+    */
     public PlayListVO save(PlayListVO playListVO){
         PlayListEntity bean= new PlayListEntity();
         playListVO.setDate(new Date());
@@ -36,6 +43,13 @@ public class PlayListServer {
         playListVO.setE(ErrorsEnumForPlayList.GOOD);
         return playListVO;
     }
+
+
+    /*
+    מקבלת: המזהה הייחודי של הפלייליסט.
+    מבצעת: מוחקת את האובייקט ממסד הנתונים.
+    מחזירה: האם הצליחה למחוק בהצלחה במידה ולא מחזירה את סיבת הבעיה.
+    */
     public ErrorsEnumForPlayList delete(Long id){
         Optional<PlayListEntity>playList;
         playList=geyById(id);
@@ -46,6 +60,13 @@ public class PlayListServer {
         playListRepository.delAllConByPlayListId(id);
         return ErrorsEnumForPlayList.GOOD;
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג פלייליסט.
+    מבצעת: מעדכנת את השורה באובייקט המעודכן.
+    מחזירה: האם הצליחה לעדכן בהצלחה במידה ולא מחזירה את סיבת הבעיה.
+    */
     private ErrorsEnumForPlayList update(PlayListVO playListVO){
         Optional<PlayListEntity> bean;
         try{
@@ -61,10 +82,24 @@ public class PlayListServer {
             return ErrorsEnumForPlayList.ELSE_ERROR;
         }
     }
+
+
+    /*
+    מקבלת: המזהה הייחודי של הפלייליסט.
+    מבצעת: מחזירה אובייקט המייצג את הפלייליסט.
+    מחזירה: מחזירה את האובייקט.
+    */
     private  Optional<PlayListEntity> geyById(Long id){
         Optional<PlayListEntity> user=playListRepository.findById(id);
         return user;
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג פלייליסט.
+    מבצעת: מביאה את הפלייליסטים שהשם שלהם כמו/דומה לשם שקיבלנו.
+    מחזירה: רשימה של האובייקטים המייצגים את הפלייליסט.
+    */
     public List<PlayListVO> getPlayListByName(PlayListVO playListVO) {
         Optional<List<PlayListEntity>>list;
             list=playListRepository.getPlayListByName(playListVO.getPlayListName(), playListVO.getId(),limitPlayListSearch);
@@ -81,6 +116,13 @@ public class PlayListServer {
         return playListVO1;
 
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג פלייליסט.
+    מבצעת: מביאה את הפלייליסטים של המשתמש.
+    מחזירה: מחזירה רשימה של אובייקטים המייצגים פלייליסט.
+    */
     public List<PlayListVO> getPlayListByUserId(PlayListVO playListVO){
         Optional<List<PlayListEntity>>list;
         list=playListRepository.getPlayListsByUserId(playListVO.getUserId());
@@ -97,11 +139,25 @@ public class PlayListServer {
         }
         return listVOS;
     }
+
+
+    /*
+    מקבלת: מזהה ייחודי של פלייליסט.
+    מבצעת: מביאה את מספר השירים שיש בו.
+    מחזירה: מספר השירים שיש בו.
+    */
     private int getLengthPlayList(Long playListId){
         int lengthPlayList;
         lengthPlayList=playListRepository.getLengthPlayList(playListId);
         return lengthPlayList;
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג פלייליסט.
+    מבצעת: מביאה רשימה של המזהים הייחודים של השירים הנמצאים בפלייליסט.
+    מחזירה: מחזירה רשימה של המייצגים הייחודים של השירים בפלייליסט.
+    */
     public List<Long> getPlayListById(PlayListVO playListVO){
         Optional<List<Object>> list;
         list=playListRepository.getSongsIdByPlayListId(playListVO.getId());
@@ -114,6 +170,13 @@ public class PlayListServer {
         }
         return listId;
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג פלייליסט.
+    מבצעת: מביאה את המידע על הפלייליסט.
+    מחזירה: מחזירה אובייקט המייצג את הפלייליסט.
+    */
     public List<SongsVO> getPlayListInfoById(PlayListVO playListVO){
         Optional<List<SongsEntity>> list;
         list=playListRepository.getPlayListInfoByPlayListId(playListVO.getId());
@@ -130,6 +193,13 @@ public class PlayListServer {
         }
         return listVo;
     }
+
+
+    /*
+    מקבלת: המזהה הייחודי של האלבום.
+    מבצעת: משנה את התמונה של הפלייליסט במסד הנתונים.
+    מחזירה: כלום.
+    */
     public void changeImagePlayList(Long playListId){
             Optional<PlayListEntity> playListEntity;
             playListEntity=playListRepository.findById(playListId);
@@ -162,6 +232,13 @@ public class PlayListServer {
             playListVOToUpdate.setImage(image);
             update(playListVOToUpdate);
     }
+
+
+    /*
+    מקבלת: 4 מערכים של בייתים המייצגים תמונות.
+    מבצעת: מחברת את כולם לתמונה אחת.
+    מחזירה: מחזירה את התמונה המחוברת.
+    */
     private byte[] combineImages(byte[] image1, byte[] image2, byte[] image3, byte[] image4) {
         BufferedImage img1,img2,img3,img4;
         try{

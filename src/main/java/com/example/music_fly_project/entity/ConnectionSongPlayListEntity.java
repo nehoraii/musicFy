@@ -23,9 +23,8 @@ import lombok.Data;
 @Entity
 @Table(name = "connection_song_play_list")
 @Data
-public class ConnectionSongPlayListEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+//מחלקה ששומרת את האובייקט המכיל את המידע של חיבור השיר לפלייליסט.
+public class ConnectionSongPlayListEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)

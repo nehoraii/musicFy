@@ -21,6 +21,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "connection_song_album")
+//מחלקה המייצגת את האובייקט ששומר את הקשר בין האלבום לשיר.
 public class ConnectionSongAlbumEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

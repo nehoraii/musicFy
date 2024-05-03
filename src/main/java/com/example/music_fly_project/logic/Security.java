@@ -1,12 +1,17 @@
 package com.example.music_fly_project.logic;
 
-import com.example.music_fly_project.entity.SongsEntity;
 import com.example.music_fly_project.vo.SongsVO;
-
+//קלאס שאחראי על ההצפנות בשרת זה
 public class Security {
-    private static int numToClient=7;
-    private static int numToDB=3;
-    private static int specialNumToSongName=  31;
+    private static final int  numToClient=7;//שדה המכיל מספר קבוע  שעוזר להצפנה בתקשורת בין השרת לקליינט והפוך.
+    private static final int numToDB=3;//שדה המכיל מספר קבוע  שעוזר להצפנה בתקשורת בין השרת למסד הנתונים והפוך.
+    private static final int specialNumToSongName=  31;//שדה המכיל מספר קבוע אשר עוזר להצפנה של שם השיר.
+
+    /*
+    מקבלת: אובייקט המייצג את השיר.
+    מבצעת: מצפינה אותו בשביל הקליינט.
+    מחזירה: כלום.
+    */
     public static void encodeToClient(SongsVO songsVO){
         if(songsVO.getTheSong()!=null){
             byte[] arr=songsVO.getTheSong();
@@ -24,6 +29,13 @@ public class Security {
             songsVO.setZaner(zaner);
         }
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג שיר.
+    מבצעת: מפענחת אותו מהקליינט.
+    מחזירה: כלום.
+    */
     public static void decipherFromClient(SongsVO songsVO){
         if(songsVO.getTheSong()!=null){
             byte[] arr=songsVO.getTheSong();
@@ -41,6 +53,13 @@ public class Security {
             songsVO.setZaner(zaner);
         }
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג שיר.
+    מבצעת: מצפינה אותו למסד המידע..
+    מחזירה: כלום.
+    */
     public static void encodeToDB(SongsVO songsVO){
         if(songsVO.getTheSong()!=null){
             byte[] arr=songsVO.getTheSong();
@@ -59,6 +78,13 @@ public class Security {
             songsVO.setZaner(zaner);
         }
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג שיר.
+    מבצעת: מפענחת אותו מהמסד מידע.
+    מחזירה: כלום.
+    */
     public static void decipherFromDB(SongsVO songsEntity){
         if(songsEntity.getTheSong()!=null){
             byte[] arr=songsEntity.getTheSong();
@@ -92,6 +118,13 @@ public class Security {
     }
 
      */
+
+
+    /*
+    מקבלת: מערך של בייתים מצב ומספר החלוקה.
+    מבצעת: במידה והמצב זה אמת אז היא מצפינה ובמידה וזה שקר היא מפענחת, מהמספר חלוקה מוציאה את המפתח.
+    מחזירה: כלום.
+    */
     private static void funSong(byte[]arr ,boolean status,int divisionNumber){
         int a=arr[0];
         int b=arr[arr.length-1];
@@ -110,6 +143,13 @@ public class Security {
         reverseRotateArrayByKey(arr,key,1,arr.length-2);
         removeAdding(arr,key);
     }
+
+
+    /*
+    מקבלת: שם של השיר מצב ומספר החלוקה.
+    מבצעת: במידה והמצב זה אמת אז היא מצפינה ובמידה וזה שקר היא מפענחת, מהמספר חלוקה מוציאה את המפתח.
+    מחזירה: כלום.
+    */
     private static String funName(String str ,boolean status,int  divisionNumber){
         int key=(str.charAt(0)+str.charAt(str.length()-1))/divisionNumber;
         if(key==0){
@@ -122,6 +162,13 @@ public class Security {
         str =removeAdding(str,key,1,str.length()-1);
         return str;
     }
+
+
+    /*
+    מקבלת: ז'אנר של השיר מצב ומספר החלוקה.
+    מבצעת: במידה והמצב זה אמת אז היא מצפינה ובמידה וזה שקר היא מפענחת, מהמספר חלוקה מוציאה את המפתח.
+    מחזירה: כלום.
+    */
     private static String funZaner(String str , boolean status, int divisionNumber){
         int key=(str.charAt(0)+str.charAt(str.length()-1))/divisionNumber;
         if(key==0){
@@ -134,6 +181,13 @@ public class Security {
         str=adding(str,key,1,str.length()-1);
         return str;
     }
+
+
+    /*
+    מקבלת: מערך של בייתים ואת המפתח.
+    מבצעת:מחסירה מכל האיברים במערך למעט האיבר הראשון והאחרון את המפתח.
+    מחזירה: כלום.
+    */
     private static void removeAdding(byte[]bytesArray,int key){
         int j;
         for (int i = 1; i < bytesArray.length-1;) {
@@ -153,6 +207,13 @@ public class Security {
             }
         }
     }
+
+
+    /*
+    מקבלת: מערך של בייתים מפתח אינדקס התחלה אינדקס סוף.
+    מבצעת: מסובבת בגודל המפתח את כל האיברים בין הטווחים של שתי האינדקסים.
+    מחזירה: כלום.
+    */
     private static void reverseRotateArrayByKey(byte[] arr, int key, int startIndex, int endIndex) {
         int rotations = key % (endIndex - startIndex + 1);
         for (int j = 0; j < rotations; j++) {
@@ -163,6 +224,13 @@ public class Security {
             arr[startIndex] = temp;
         }
     }
+
+
+    /*
+    מקבלת: מערך של בייתים מפתח אינדקס התחלה אינדקס סוף.
+    מבצעת: מוסיפה את הערך של המפתח לכל איבר בתחום של האינדקס ההתחלה והסוף.
+    מחזירה: כלום.
+    */
     private static void adding(byte[]bytesArray,int key,int startIndex,int lastIndex){
         int j;
         for (int i = startIndex; i < lastIndex;) {
@@ -182,6 +250,13 @@ public class Security {
             }
         }
     }
+
+
+    /*
+     מקבלת: מערך של בייתים מפתח אינדקס התחלה ואינדקס סוף.
+    מבצעת: מסובבת קדימה את כל האיברים בטווח שבין האינדקס התחלה לאינדקס סוף בגודל המפתח.
+    מחזירה: כלום.
+     */
     private static void rotateArrayByKey(byte[] arr, int key, int startIndex, int endIndex) {
         int rotations = key % (endIndex - startIndex + 1);
         for (int j = 0; j < rotations; j++) {
@@ -192,6 +267,13 @@ public class Security {
             arr[endIndex] = temp;
         }
     }
+
+
+    /*
+       מקבלת: מחרוזת,מפתח אינדקס התחלה אינדקס סוף.
+    מבצעת: מוסיפה לכל איבר בטווח שבין האינדקס התחלה לאינקס סוף את הערך של המפתח.
+מחזירה: את המחרוזת החדשה.
+    */
     private static String adding(String str,int key,int startIndex,int lastIndex){
         char[] charArray = str.toCharArray();
         for (int i = startIndex; i < lastIndex;i++) {
@@ -199,6 +281,13 @@ public class Security {
             }
         return new String(charArray);
     }
+
+
+    /*
+    מקבלת: מחרוזת,מפתח.
+    מבצעת: מוסיפה לכל המחרוזת את המפתח.
+    מחזירה: את המחרוזת החדשה.
+    */
     private static String addingToAllString(String str,int key){
         char[] charArray = str.toCharArray();
         for (int i = 0; i < charArray.length;i++) {
@@ -206,6 +295,13 @@ public class Security {
         }
         return new String(charArray);
     }
+
+
+    /*
+    מקבלת: מחרוזת,מפתח.
+    מבצעת: מחסירה לכל המחרוזת את המפתח.
+    מחזירה: את המחרוזת החדשה.
+    */
     private static String removingToAllString(String str,int key){
         char[] charArray = str.toCharArray();
         for (int i = 0; i < charArray.length;i++) {
@@ -213,6 +309,13 @@ public class Security {
         }
         return new String(charArray);
     }
+
+
+    /*
+    מקבלת: מחרוזת,מפתח אינדקס התחלה אינדקס סוף.
+    מבצעת: מחסירה לכל איבר בטווח שבין האינדקס התחלה לאינקס סוף את הערך של המפתח.
+    מחזירה: את המחרוזת החדשה.
+    */
     private static String removeAdding(String str,int key,int startIndex,int lastIndex){
         char[] charArray = str.toCharArray();
         for (int i = startIndex; i < lastIndex;i++) {

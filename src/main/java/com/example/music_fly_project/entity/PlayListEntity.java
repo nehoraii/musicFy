@@ -24,6 +24,7 @@ import lombok.Data;
 @Entity
 @Table(name = "play_list",schema = "public")
 @Data
+//שומרת את המידע על האובייקט פלייליסט כמו ב-DB
 public class PlayListEntity{
 
     @Id

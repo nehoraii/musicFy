@@ -13,11 +13,20 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/ConSongAlbum")
 @CrossOrigin("*")
+//מחלקה האחרית לניתוב בקשות הקליינט על ידי ה-URL שאיתו מגיעה ושלחת את בקשתו לפונקציה המתאימה
 public class ConnectionSongAlbumController {
     @Autowired
-    private ConnectionSongAlbumServer connectionSongAlbumServer;
+    private ConnectionSongAlbumServer connectionSongAlbumServer;//אובייקט הכלה של connectionSongAlbumServer.
     @Autowired
-    private SongsServer songsServer;
+    private SongsServer songsServer; //אובייקט הכלה של songsServer.
+
+
+
+    /*
+    מקבלת: אובייקט המייצג חיבור בין אלבום לשיר.
+    מבצעת: קוראת לפונקציה המתאימה ב-server ושולחת לו את האובייקט.
+    מחזירה: האם הצליחה לשמור את הקשר בהצלחה במידה ולא מחזירה את סיבת הבעיה.
+    */
     @PostMapping("/save")
     public ErrosEnumForConnectionSongAlbum save(@RequestBody ConnectionSongAlbumsVO conVO){
         ErrosEnumForConnectionSongAlbum e;
@@ -30,6 +39,12 @@ public class ConnectionSongAlbumController {
         e=connectionSongAlbumServer.update(conVO);
         return e;
     }
+    */
+
+
+    /*מקבלת: אובייקט המייצג חיבור בין אלבום לשיר.
+    מבצעת: קוראת לפונקציה המתאימה ב-server ושולחת לו את האובייקט.
+    מחזירה: האם הצליחה למחוק את הקשר בהצלחה במידה ולא מחזירה את סיבת הבעיה.
     */
     @DeleteMapping("/delete")
     public ErrosEnumForConnectionSongAlbum delete(@RequestBody ConnectionSongAlbumsVO conVO){

@@ -4,16 +4,28 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.*;
-
+//כאן יש לנו את כל הלוגיקה החיצונית שנצטרך בשביל האובייקט המתאים
 public class FtpLogic {
-    private static String server="127.0.0.1";
-    private static int port=21;
-    private static String userRequest="2";
-    private static String passRequest="2";
-    private static String pathToSaveSong="C:\\Users\\user\\Desktop\\w";
+    private static String server="127.0.0.1";//שדה המכיל את כתובת ה-IP ש השרת
+    private static int port=21;//שדה המכיל את הפורט שהשרת "מאזין" בו
+    private static String userRequest="2";//שם המשמש המוגדר לכולם בעת שרוצים לקבל שיר
+    private static String passRequest="2";//סיסמה שמוגדרת לכולם בעת שרוצים להתחבר לשרת ולקבל שיר מסוים.
+    private static String pathToSaveSong="C:\\Users\\user\\Desktop\\w";//הנתיב שבו נשמר בשרת כל השירים
+
+    /*
+    מקבלת: כלום.
+    מבצעת: מחזירה את הנתון מהשדה.
+    מחזירה: את הנתיב שבו ישמרו הקבתצים בשרת ה-FTP.
+    */
     public static String getPath(){
         return pathToSaveSong;
     }
+
+    /*
+    מקבלת: שם המשתמש, סיסמה של המשתמש,המזהה הייחודי של המשתמש, השיר עצמו,ושם הצ'אנק.
+    מבצעת: מעלה את השיר לשרת.
+    מחזירה: האם הצליחה או לא.
+    */
     public static boolean uploadFile(Long user, Long pass,Long songId, byte[] song,Long nameFile) {
         FTPClient ftpClient = new FTPClient();
 
@@ -52,6 +64,11 @@ public class FtpLogic {
         }
         return true;
     }
+
+    /*מקבלת: הנתיב לשיר.
+    מבצעת: מביעאה את המידע מהשרת FTP.
+מחזירה: מערך של בייתים המייצג את השיר.
+    */
     public static byte[] requestFileFromServer(String pathSong) {
         FTPClient ftpClient = new FTPClient();
         OutputStream outputStream=new ByteArrayOutputStream();;
@@ -87,6 +104,12 @@ public class FtpLogic {
         }
         return ((ByteArrayOutputStream) outputStream).toByteArray();
     }
+
+    /*
+    מקבלת: נתיב לקובץ ואת שם המשתמש והסיסמה.
+    מבצעת: מוחקת את הקובץ מהשרת.
+    מחזירה: האם הצליחה למחוק בהצלחה או לא.
+    */
     public static boolean deleteFile(String path,Long user,Long pass){
         FTPClient ftpClient = new FTPClient();
         try {
@@ -123,6 +146,11 @@ public class FtpLogic {
         }
         return true;
     }
+
+    /* מקבלת: מקבלת שם משתמש וסיסמה של המשתמש.
+    מבצעת: יוצרת תיקייה בשם של שם המשתמש(המזהה שלו).
+    מחזירה: האם הצליחה ליצור תיקייה בהצלחה או לא.
+    */
     public static boolean createDirectory(Long user,Long pass){
         FTPClient ftpClient = new FTPClient();
         try {
@@ -159,6 +187,12 @@ public class FtpLogic {
         }
         return true;
     }//for user
+
+    /*מקבלת: מזהה ייחודי של השיר, שם משתמש וסיסמה.
+    מבצעת: יוצרת תיקייה לשיר החדש.
+    מחזירה: האם הצליחה ליצור תיקייה.
+
+    */
     public static boolean createDirectory(Long songId,Long user,Long pass){
         FTPClient ftpClient = new FTPClient();
         try {
@@ -195,6 +229,11 @@ public class FtpLogic {
         }
         return true;
     }//for song
+
+    /*מקבלת: את הנתיב שבו נמצאים הקבצים.
+    מבצעת: בודקת כמה קבצים נמצאים בתיקייה.
+    מחזירה: מספר הקבצים.
+     */
     public static int getAmountOfFiles(String path){
         FTPClient ftpClient = new FTPClient();
         try {

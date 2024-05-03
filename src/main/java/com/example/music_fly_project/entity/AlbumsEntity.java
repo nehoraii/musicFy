@@ -22,6 +22,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "albums")
+//מחלקה המייצגת את הטבל של האלבומים.
 public class AlbumsEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

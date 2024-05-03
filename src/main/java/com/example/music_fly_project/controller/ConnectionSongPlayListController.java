@@ -12,15 +12,30 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/ConSongPlayList")
 @RestController
 @CrossOrigin("*")
+//מחלקה האחרית לניתוב בקשות הקליינט על ידי ה-URL שאיתו מגיעה ושלחת את בקשתו לפונקציה המתאימה
 public class ConnectionSongPlayListController {
     @Autowired
-    private ConnectionSongPlayListServer server;
+    private ConnectionSongPlayListServer server;//אובייקט הכלה ל- ConnectionSongPlayListServer.
+
+
+    /*
+    מקבלת: אובייקט המייצג חיבור בין פלייליסט לשיר.
+    מבצעת: קוראת לפונקציה המתאימה ב-server ושולחת לו את האובייקט.
+    מחזירה: האם הצליחה לשמור את הקשר בהצלחה במידה ולא מחזירה את סיבת הבעיה.
+    */
     @PostMapping("/save")
     public ErrorEnumForConSongPlayList save(@RequestBody ConnectionSongPlayListVO connectionSongPlayListVO){
         ErrorEnumForConSongPlayList e;
         e=server.save(connectionSongPlayListVO);
         return e;
     }
+
+
+    /*
+    מקבלת: אובייקט המייצג חיבור בין פלייליסט לשיר.
+    מבצעת: קוראת לפונקציה המתאימה ב-server ושולחת לו את האובייקט.
+    מחזירה: האם הצליחה למחוק את הקשר בהצלחה במידה ולא מחזירה את סיבת הבעיה.
+    */
     @DeleteMapping("/delete")
     public ErrorEnumForConSongPlayList delete(@RequestBody ConnectionSongPlayListVO connectionSongPlayListVO){
         ErrorEnumForConSongPlayList e;

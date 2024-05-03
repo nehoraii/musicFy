@@ -12,7 +12,14 @@ import java.util.Optional;
 public class ConnectionSongAlbumServer {
 
     @Autowired
-    private ConnectionSongAlbumRepository connectionSongAlbumRepository;
+    private ConnectionSongAlbumRepository connectionSongAlbumRepository;//אובייקט הכלה מסוג ConnectionSongAlbumRepository.
+
+
+    /*
+    מקבלת: אובייקט המייצג חיבור בין שיר לאלבום.
+    מבצעת: שומרת את האובייקט.
+    מחזירה: מחזירה האם הצליחה לשמור בהצלחה את החיבור במידה ולא מחזירה את סיבת הבעיה.
+    */
     public ErrosEnumForConnectionSongAlbum save(ConnectionSongAlbumsVO conVO){
         ConnectionSongAlbumEntity bean =new ConnectionSongAlbumEntity();
         BeanUtils.copyProperties(conVO,bean);
@@ -77,6 +84,13 @@ public class ConnectionSongAlbumServer {
         return listVo;
     }
      */
+
+
+    /*
+    מקבלת: המזהה הייחודי של השיר.
+    מבצעת: מוחקת את כל הקשרים של השיר מהמערכת וגם את השיר מוחקת.
+    מחזירה: האם הצליחה למחוק בהצלחה את הקשר.
+    */
     public ErrosEnumForConnectionSongAlbum delConBySongId(Long songId){
         try {
             connectionSongAlbumRepository.delConBySongId(songId);

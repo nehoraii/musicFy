@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.util.Date;
 @Data
+//אובייקט המייצג שיר לקליינט על פי הנתונים הרלוונטים שהוגדרו מראש
 public class SongsVO {
     private Long id;
     private Long userId;

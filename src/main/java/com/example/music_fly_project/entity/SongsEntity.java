@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "songs",schema = "public",catalog = "music_fly_project")
+//מחלקה המייצגת את האובייקט מסוג שיר כמו שמיוצג ב-DB.
 public class SongsEntity {
 
     @Id
