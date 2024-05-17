@@ -178,7 +178,7 @@ public class PlayListServer {
     מחזירה: מחזירה אובייקט המייצג את הפלייליסט.
     */
     public List<SongsVO> getPlayListInfoById(PlayListVO playListVO){
-        Optional<List<SongsEntity>> list;
+        Optional<List<Object[]>> list;
         list=playListRepository.getPlayListInfoByPlayListId(playListVO.getId());
         if(!list.isPresent()){
             return null;
@@ -186,7 +186,11 @@ public class PlayListServer {
         List<SongsVO> listVo = new ArrayList<>();
         for (int i = 0; i < list.get().size(); i++) {
             SongsVO songsVO=new SongsVO();
-            BeanUtils.copyProperties(list.get().get(i),songsVO);
+            songsVO.setId((Long) list.get().get(i)[0]);
+            songsVO.setUserId((Long) list.get().get(i)[1]);
+            songsVO.setZaner((String) list.get().get(i)[2]);
+            songsVO.setDate((Date) list.get().get(i)[3]);
+            songsVO.setNameSong((String) list.get().get(i)[4]);
             Security.decipherFromDB(songsVO);
             Security.encodeToClient(songsVO);
             listVo.add(songsVO);

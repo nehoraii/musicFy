@@ -51,8 +51,14 @@ public interface PlayListRepository extends JpaRepository<PlayListEntity,Long> {
     מבצעת:מביאה את הושרה במסד הנתונים כולה.
    מחזירה: אובייקט המייצג פלייליסט.
     */
-    @Query("SELECT s FROM SongsEntity s JOIN ConnectionSongPlayListEntity e ON s.id=e.songId WHERE e.playListId=:playListId")
-    Optional<List<SongsEntity>>getPlayListInfoByPlayListId(@Param("playListId")Long playListId);
+    // המיון לפי ה-e.id כדי שיבואו לפי סדר שמירתם ולא לפי סדר שהשיר עלה למערכת
+
+    //האוטומטית כלומר שימוש ב-JPA לא מביא כפל שורות אלא מביא יחידית לעמות זאת הידני כן מביא
+    /*@Query("SELECT s FROM SongsEntity s JOIN ConnectionSongPlayListEntity e ON s.id=e.songId WHERE e.playListId=:playListId GROUP BY s.id ORDER BY MIN(e.id)")
+    Optional<List<SongsEntity>> getPlayListInfoByPlayListId3(@Param("playListId") Long playListId);*/
+
+    @Query(value = "SELECT s.* FROM songs s JOIN connection_song_play_list csp ON s.id = csp.song_id WHERE csp.play_list_id = :playListId ORDER BY csp.id", nativeQuery = true)
+    Optional<List<Object[]>>getPlayListInfoByPlayListId(@Param("playListId")Long playListId);
     /*@Query(value = "SELECT songs.id,user_id,zaner,date,name_song,song_path FROM songs JOIN connection_song_play_list ON songs.id=connection_song_play_list.song_id WHERE connection_song_play_list.play_list_id=?1",nativeQuery = true)
     Optional<List<Object[]>>getPlayListInfoByPlayListId2(long playListId);*/
 

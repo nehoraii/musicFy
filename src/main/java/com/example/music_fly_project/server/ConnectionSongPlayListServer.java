@@ -26,10 +26,12 @@ public class ConnectionSongPlayListServer {
         ConnectionSongPlayListEntity bean=new ConnectionSongPlayListEntity();
         try {
             BeanUtils.copyProperties(conSongPlayList,bean);
-            Optional<ConnectionSongPlayListEntity> connectionSongPlayListEntities=conSongPlayListRepository.getConBySongIdAndPlayListId(conSongPlayList.getSongId(),conSongPlayList.getPlayListId());
+           //יש כאן תנאי שמונע כפילויות
+            /* Optional<ConnectionSongPlayListEntity> connectionSongPlayListEntities=conSongPlayListRepository.getConBySongIdAndPlayListId(conSongPlayList.getSongId(),conSongPlayList.getPlayListId());
             if(connectionSongPlayListEntities.isPresent()){
                 return ErrorEnumForConSongPlayList.CONNECTION_EXISTS;
             }
+            */
             conSongPlayListRepository.save(bean);
         }catch (Exception e){
             return ErrorEnumForConSongPlayList.NOT_SAVED_SUCCESSFULLY;
